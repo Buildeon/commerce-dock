@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commerce Dock — Sovereign Operations Launcher & Stack Hub</title>
+  <meta name="description" content="Open-source sovereign operations hub and zero-knowledge client-side encrypted stack launcher for composable commerce, AI, and cloud infrastructure.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>⚓</text></svg>">
+  <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="dock-header">
+    <div class="dock-header-inner">
+      <div class="brand-section">
+        <div class="brand-logo">⚓</div>
+        <div class="brand-text">
+          <h1 id="dock-title">Commerce Dock</h1>
+          <p id="dock-subtitle">Sovereign Composable Operations</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Preset Selector -->
+        <select id="preset-selector" class="btn btn-outline btn-sm" style="font-family: var(--font-mono); outline: none;">
+          <option value="demo">Interactive Sandbox (Demo)</option>
+          <option value="sharafdg">Sharaf DG GCC Omnichannel</option>
+          <option value="buildeon-fleet">Buildeon Internal Fleet</option>
+        </select>
+
+        <!-- Vault Status Indicator -->
+        <div id="vault-status-pill" class="vault-pill locked">
+          🔒 <span>Vault: Encrypted</span>
+        </div>
+
+        <!-- Master Password Unlock / Lock -->
+        <button id="unlock-vault-btn" class="btn btn-primary btn-sm">
+          Unlock Vault
+        </button>
+
+        <!-- Backup Vault -->
+        <button id="export-vault-btn" class="btn btn-outline btn-sm" title="Export Zero-Knowledge Encrypted Backup">
+          💾 Backup
+        </button>
+
+        <button id="wipe-vault-btn" class="btn btn-danger btn-sm" title="Wipe Local Vault Cache">
+          🗑️
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero / Stack Banner -->
+    <section class="hero-banner">
+      <div class="hero-content">
+        <h2 id="hero-title">Sovereign Operations Cockpit</h2>
+        <p id="hero-desc">
+          Zero-knowledge client-side encrypted operational hub. Store multi-environment credentials in browser memory using AES-256-GCM and PBKDF2 without transmitting keys to any server.
+        </p>
+      </div>
+    </section>
+
+    <!-- Theme Customizer Bar (Can be toggled off per preset) -->
+    <section id="theme-customizer" class="theme-customizer-box">
+      <span class="theme-customizer-title">🎨 Brand Auto-Themer:</span>
+      <div class="palette-picker">
+        <div class="color-dot" data-theme="buildeon" style="background: #6366f1;" title="Buildeon Modern"></div>
+        <div class="color-dot" data-theme="sharafdg" style="background: #ffcc00;" title="Sharaf DG Gold/Navy"></div>
+        <div class="color-dot" data-theme="emerald" style="background: #10b981;" title="Emerald Terminal"></div>
+        <div class="color-dot" data-theme="amber" style="background: #f59e0b;" title="Cyber Amber"></div>
+        <div class="color-dot" data-theme="slate" style="background: #38bdf8;" title="Minimal Slate"></div>
+      </div>
+
+      <div class="url-themer-input">
+        <input type="text" id="url-theme-input" class="form-control" placeholder="Enter company domain (e.g. uae.sharafdg.com, nike.com)" style="padding: 6px 12px; font-size: 0.8rem;">
+        <button id="apply-url-theme-btn" class="btn btn-outline btn-sm">Extract Theme</button>
+      </div>
+    </section>
+
+    <!-- Controls Bar: Search & Categories -->
+    <section class="controls-bar">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Search services, platforms, credentials, URLs...">
+      </div>
+
+      <div class="category-tabs" id="category-tabs">
+        <button class="tab-btn active" data-category="all">All Stack</button>
+        <button class="tab-btn" data-category="commerce">Commerce</button>
+        <button class="tab-btn" data-category="analytics">Analytics</button>
+        <button class="tab-btn" data-category="automation">Automation</button>
+        <button class="tab-btn" data-category="ai">AI & LLM</button>
+        <button class="tab-btn" data-category="infra">Infra</button>
+        <button class="tab-btn" data-category="marketing">Marketing</button>
+        <button class="tab-btn" data-category="inbound">Inbound</button>
+      </div>
+    </section>
+
+    <!-- Services Dynamic Grid -->
+    <section class="services-grid" id="services-grid">
+      <!-- Injected by app.js -->
+    </section>
+  </main>
+
+  <!-- Vault Modal (Unlock / Master Password) -->
+  <div class="modal-overlay" id="vault-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="vault-modal-title">Unlock Zero-Knowledge Vault</h3>
+        <button class="close-btn" id="close-vault-modal">&times;</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--dock-text-muted); margin-bottom: 16px; line-height: 1.4;">
+        Enter your master password. Cryptographic keys are derived in RAM via <strong>PBKDF2 (100,000 rounds)</strong> and decrypt your vault using <strong>AES-256-GCM</strong>. Passwords never leave your device.
+      </p>
+      <div class="form-group">
+        <label for="vault-password-input">Master Password</label>
+        <input type="password" id="vault-password-input" class="form-control" placeholder="••••••••••••••••">
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn btn-primary" id="vault-modal-submit">Decrypt Vault</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Encrypted Vault Export/Backup Modal -->
+  <div class="modal-overlay" id="io-modal">
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <h3 id="io-modal-title">Zero-Knowledge Encrypted Vault Backup</h3>
+        <button class="close-btn" id="close-io-modal">&times;</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--dock-text-muted); margin-bottom: 12px;">
+        Copy this encrypted JSON payload. It is fully encrypted with your master password key. It is safe to store in git or local disk.
+      </p>
+      <div class="form-group">
+        <textarea id="io-textarea" class="form-control" rows="12" readonly style="font-family: var(--font-mono); font-size: 0.78rem;"></textarea>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn btn-outline" id="close-io-modal-btn" onclick="document.getElementById('io-modal').classList.remove('open')">Close</button>
+        <button class="btn btn-primary" id="io-submit-btn" style="display: none;">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Action completed</div>
+
+  <!-- Footer -->
+  <footer class="dock-footer">
+    <div class="container">
+      <p>
+        <strong>Commerce Dock</strong> — Open Source Sovereign Operations Launcher & Stack Hub.
+        Crafted by <a href="https://buildeon.solutions" target="_blank" rel="noopener">Buildeon Solutions</a>.
+        Licensed under MIT. Open Source on <a href="https://github.com/Buildeon/commerce-dock" target="_blank" rel="noopener">GitHub</a>.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="src/js/vault.js"></script>
+  <script src="src/js/theme.js"></script>
+  <script src="src/js/app.js"></script>
+</body>
+</html>

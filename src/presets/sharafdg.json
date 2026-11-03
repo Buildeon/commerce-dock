@@ -1,0 +1,213 @@
+{
+  "dockId": "sharafdg-enterprise",
+  "title": "Sharaf DG Omnichannel Operations Dock",
+  "subtitle": "Tailored Composable Operations Cockpit · Staging & Production",
+  "brand": {
+    "name": "Sharaf DG",
+    "theme": "sharafdg",
+    "primaryColor": "#ffcc00",
+    "secondaryColor": "#002f6c",
+    "bgColor": "#0b1329",
+    "allowThemeCustomizer": false
+  },
+  "services": [
+    {
+      "id": "sdg-oms",
+      "name": "Order Management System (OMS)",
+      "category": "commerce",
+      "badge": "Laravel Engine",
+      "url": "https://dgoms.sharafdg.com",
+      "status": "online",
+      "description": "Enterprise order orchestration engine routing orders across GCC distribution hubs, stores, and last-mile couriers.",
+      "icon": "📦",
+      "subplatforms": [
+        {
+          "name": "OMS Production Console",
+          "url": "https://dgoms.sharafdg.com",
+          "icon": "🟢",
+          "description": "Live production order routing, allocation, and invoice generation."
+        },
+        {
+          "name": "OMS Staging Environment",
+          "url": "https://oms.sdgstage.com",
+          "icon": "🧪",
+          "description": "Pre-release order orchestration testing sandbox."
+        }
+      ]
+    },
+    {
+      "id": "sdg-pim",
+      "name": "Akeneo Enterprise PIM",
+      "category": "commerce",
+      "badge": "Cloud Catalog",
+      "url": "https://sharafdg.cloud.akeneo.com",
+      "status": "online",
+      "description": "Master product catalog, category taxomony, technical spec sheets, and digital asset management for GCC catalogs.",
+      "icon": "🏷️",
+      "subplatforms": [
+        {
+          "name": "Akeneo PIM (Production)",
+          "url": "https://sharafdg.cloud.akeneo.com",
+          "icon": "🟢",
+          "description": "Live master product catalog and attribute enrichment."
+        },
+        {
+          "name": "Akeneo PIM (Staging)",
+          "url": "https://staging-sharafdg.cloud.akeneo.com",
+          "icon": "🧪",
+          "description": "Staging product sync and syndication testing."
+        }
+      ]
+    },
+    {
+      "id": "sdg-storefronts",
+      "name": "Regional Storefronts",
+      "category": "commerce",
+      "badge": "GCC Flagship",
+      "url": "https://uae.sharafdg.com",
+      "status": "online",
+      "description": "High-traffic consumer retail storefronts powering electronics and appliance commerce across the GCC.",
+      "icon": "🛍️",
+      "subplatforms": [
+        {
+          "name": "UAE Storefront",
+          "url": "https://uae.sharafdg.com",
+          "icon": "🇦🇪",
+          "description": "Flagship United Arab Emirates marketplace."
+        },
+        {
+          "name": "Oman Storefront",
+          "url": "https://oman.sharafdg.com",
+          "icon": "🇴🇲",
+          "description": "Sultanate of Oman regional store."
+        },
+        {
+          "name": "Saudi Arabia Storefront",
+          "url": "https://saudi.sharafdg.com",
+          "icon": "🇸🇦",
+          "description": "Kingdom of Saudi Arabia retail store."
+        },
+        {
+          "name": "Bahrain Storefront",
+          "url": "https://bahrain.sharafdg.com",
+          "icon": "🇧🇭",
+          "description": "Kingdom of Bahrain regional store."
+        },
+        {
+          "name": "Store Administration (WP-Admin)",
+          "url": "https://uae.sharafdg.com/wp-admin",
+          "icon": "⚙️",
+          "description": "Content, landing pages, and banners."
+        }
+      ]
+    },
+    {
+      "id": "sdg-woocommerce-staging",
+      "name": "WooCommerce Engine (Staging)",
+      "category": "commerce",
+      "badge": "Staging Commerce",
+      "url": "https://uae.sdgstage.com",
+      "status": "online",
+      "description": "Dedicated pre-production commerce environment for checkout validation, plugin testing, and payment gateway staging.",
+      "icon": "🛒",
+      "subplatforms": [
+        {
+          "name": "Staging Storefront",
+          "url": "https://uae.sdgstage.com",
+          "icon": "🧪",
+          "description": "Live preview of new features and pricing updates."
+        },
+        {
+          "name": "Staging Admin Panel (WP-Admin)",
+          "url": "https://uae.sdgstage.com/wp-admin",
+          "icon": "🔑",
+          "description": "Plugin configuration, database tests, and order audits."
+        }
+      ]
+    },
+    {
+      "id": "sdg-search-algolia",
+      "name": "Algolia AI Search & Discovery",
+      "category": "analytics",
+      "badge": "Search Index",
+      "url": "https://dashboard.algolia.com",
+      "status": "online",
+      "description": "Real-time SKU facet search, sub-10ms query latency, typo tolerance, and personalized query suggestions.",
+      "icon": "🔍",
+      "subplatforms": [
+        {
+          "name": "Algolia Search (Production App)",
+          "url": "https://dashboard.algolia.com",
+          "icon": "🟢",
+          "description": "Live production search clusters and ranking rules."
+        },
+        {
+          "name": "Algolia Search (Staging App)",
+          "url": "https://dashboard.algolia.com",
+          "icon": "🧪",
+          "description": "Index re-indexing trials and rule testing."
+        }
+      ]
+    },
+    {
+      "id": "sdg-jobs-scheduler",
+      "name": "Async Job Scheduler",
+      "category": "infra",
+      "badge": "Laravel Worker",
+      "url": "https://jobs.sdgstage.com",
+      "status": "online",
+      "description": "High-throughput asynchronous queue worker processing catalog imports, price batch feeds, and ERP sync jobs.",
+      "icon": "⚡",
+      "subplatforms": [
+        {
+          "name": "Queue Monitor & Horizon",
+          "url": "https://jobs.sdgstage.com",
+          "icon": "📊",
+          "description": "Live queue throughput, failed jobs, and retries."
+        }
+      ]
+    },
+    {
+      "id": "sdg-cloud-azure",
+      "name": "Microsoft Azure Cloud",
+      "category": "infra",
+      "badge": "Enterprise Cloud",
+      "url": "https://portal.azure.com",
+      "status": "online",
+      "description": "Enterprise cloud infrastructure powering Sharaf DG clusters, blob storage, load balancers, and virtual networks.",
+      "icon": "☁️",
+      "subplatforms": [
+        {
+          "name": "Azure Production Subscriptions",
+          "url": "https://portal.azure.com",
+          "icon": "🟢",
+          "description": "Production AKS Kubernetes, SQL, and CDN."
+        },
+        {
+          "name": "Azure Staging Resource Group",
+          "url": "https://portal.azure.com",
+          "icon": "🧪",
+          "description": "Pre-prod staging resources and VM scale sets."
+        }
+      ]
+    },
+    {
+      "id": "sdg-observability-grafana",
+      "name": "Grafana Observability",
+      "category": "infra",
+      "badge": "Metrics & Alerts",
+      "url": "https://grafana.sdgstage.com",
+      "status": "online",
+      "description": "Unified infrastructure telemetry monitoring server CPU/RAM, MySQL slow queries, Nginx latencies, and OMS job throughput.",
+      "icon": "📈",
+      "subplatforms": [
+        {
+          "name": "Staging Telemetry Dashboards",
+          "url": "https://grafana.sdgstage.com",
+          "icon": "📊",
+          "description": "Live metrics, alerting thresholds, and error logs."
+        }
+      ]
+    }
+  ]
+}

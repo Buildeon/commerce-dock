@@ -1,0 +1,152 @@
+{
+  "dockId": "public-demo",
+  "title": "Commerce Dock — Sovereign Operations Launcher & Stack Hub",
+  "subtitle": "Interactive Public Demo & Composable Commerce Sandbox",
+  "brand": {
+    "name": "Commerce Dock",
+    "theme": "buildeon",
+    "allowThemeCustomizer": true
+  },
+  "services": [
+    {
+      "id": "demo-opencart",
+      "name": "OpenCart",
+      "category": "commerce",
+      "badge": "Active Demo",
+      "url": "https://demo.opencart.com/",
+      "status": "online",
+      "description": "Lightweight open-source e-commerce platform with pre-configured administrative sandbox and order workflow.",
+      "icon": "🛒",
+      "credentials": {
+        "username": "demo",
+        "hint": "Master Password Unlocks: demo / demo"
+      },
+      "subplatforms": [
+        {
+          "name": "Admin Control Panel",
+          "url": "https://demo.opencart.com/TlbeVW/",
+          "icon": "🔑",
+          "description": "Login: demo / demo (prefilled sandbox access)"
+        },
+        {
+          "name": "OpenCart Storefront",
+          "url": "https://demo.opencart.com/",
+          "icon": "🛍️",
+          "description": "Public catalog, product variants, and checkout flow."
+        }
+      ]
+    },
+    {
+      "id": "demo-adobe-commerce",
+      "name": "Adobe Commerce (Magento 2)",
+      "category": "commerce",
+      "badge": "Enterprise B2B Demo",
+      "url": "https://magento2-b2b.magebit.com/",
+      "status": "online",
+      "description": "Enterprise composable commerce platform with multi-warehouse inventory, B2B quotes, and customer groups.",
+      "icon": "🏬",
+      "credentials": {
+        "username": "magebit",
+        "hint": "Master Password Unlocks: magebit / Demo123"
+      },
+      "subplatforms": [
+        {
+          "name": "Magento 2 Admin Console",
+          "url": "https://magento2-b2b.magebit.com/admin",
+          "icon": "⚙️",
+          "description": "Login: magebit / Demo123"
+        },
+        {
+          "name": "B2B Storefront",
+          "url": "https://magento2-b2b.magebit.com/",
+          "icon": "📦",
+          "description": "Enterprise quote generator, bulk ordering & Tier pricing."
+        }
+      ]
+    },
+    {
+      "id": "demo-unopim",
+      "name": "UnoPim PIM",
+      "category": "commerce",
+      "badge": "Open-Source PIM",
+      "url": "https://demo.unopim.com/",
+      "status": "online",
+      "description": "Next-generation Product Information Management built on modern architecture for multi-channel product syndication.",
+      "icon": "🏷️",
+      "subplatforms": [
+        {
+          "name": "UnoPim Interactive Sandbox",
+          "url": "https://demo.unopim.com/",
+          "icon": "⚡",
+          "description": "Explore attribute families, categories, and channels."
+        },
+        {
+          "name": "UnoPim Admin Login",
+          "url": "https://demo.unopim.com/admin/login",
+          "icon": "📋",
+          "description": "Interactive admin playground."
+        }
+      ]
+    },
+    {
+      "id": "demo-bagisto",
+      "name": "Bagisto B2C & B2B",
+      "category": "commerce",
+      "badge": "Laravel Commerce",
+      "url": "https://demo.bagisto.com/",
+      "status": "online",
+      "description": "Modular Laravel-based headless e-commerce platform with multi-tenant marketplace and multi-currency engine.",
+      "icon": "🛍️",
+      "subplatforms": [
+        {
+          "name": "Bagisto Storefront Demo",
+          "url": "https://demo.bagisto.com/",
+          "icon": "🏪",
+          "description": "Responsive PWA storefront and catalog."
+        },
+        {
+          "name": "Bagisto Admin Panel",
+          "url": "https://demo.bagisto.com/admin/login",
+          "icon": "📊",
+          "description": "Multi-vendor management, promotions, and shipping."
+        }
+      ]
+    },
+    {
+      "id": "demo-umami",
+      "name": "Umami Analytics",
+      "category": "analytics",
+      "badge": "Privacy Telemetry",
+      "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
+      "status": "online",
+      "description": "Zero-cookie, GDPR-compliant privacy analytics telemetry tracking live visitors, events, and referrer graphs.",
+      "icon": "📊",
+      "subplatforms": [
+        {
+          "name": "Umami Live Demo Dashboard",
+          "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
+          "icon": "📈",
+          "description": "Live real-time telemetry metrics."
+        }
+      ]
+    },
+    {
+      "id": "demo-medusa",
+      "name": "Medusa v2 Composable",
+      "category": "commerce",
+      "badge": "Headless Engine",
+      "url": "https://medusajs.com/",
+      "status": "online",
+      "description": "Open-source composable commerce engine with modern Node.js architecture, workflows, and multi-region tax/pricing.",
+      "icon": "🐙",
+      "subplatforms": [
+        {
+          "name": "Medusa Documentation & Architecture",
+          "url": "https://docs.medusajs.com/",
+          "icon": "📖",
+          "description": "Workflows, modules, and API specifications."
+        }
+      ]
+    }
+  ]
+}

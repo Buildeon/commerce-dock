@@ -1,0 +1,385 @@
+{
+  "dockId": "buildeon-fleet-ops",
+  "title": "Buildeon Fleet Operations Dock",
+  "subtitle": "Private Sovereign Command Center & Deployment Matrix",
+  "brand": {
+    "name": "Buildeon Ops",
+    "theme": "buildeon",
+    "primaryColor": "#6366f1",
+    "secondaryColor": "#06b6d4",
+    "bgColor": "#0b0f19",
+    "allowThemeCustomizer": true
+  },
+  "services": [
+    {
+      "id": "infra-dokploy",
+      "name": "Dokploy VPS Orchestrator",
+      "category": "infra",
+      "badge": "VPS 13 Swarm",
+      "url": "http://13.140.160.189:3000",
+      "status": "online",
+      "description": "Docker Swarm PaaS orchestrator, automated container rollouts, Traefik dynamic routing, and SSL cert generation.",
+      "icon": "🚢",
+      "credentials": {
+        "username": "buildeonhq@gmail.com",
+        "hint": "Master Password controls Dokploy Swarm & DB credentials"
+      },
+      "subplatforms": [
+        {
+          "name": "Dokploy Dashboard (Local Tunnel)",
+          "url": "http://127.0.0.1:3000",
+          "icon": "🚢",
+          "description": "Login: buildeonhq@gmail.com (SSH Tunnel: port 3000)"
+        },
+        {
+          "name": "Dokploy Direct Host",
+          "url": "http://13.140.160.189:3000",
+          "icon": "🌐",
+          "description": "Direct ingress on VPS 13"
+        },
+        {
+          "name": "Traefik Router Dashboard",
+          "url": "https://traefik.buy2give.store/dashboard/",
+          "icon": "🔀",
+          "description": "Traefik reverse proxy metrics & TLS dynamic routers"
+        }
+      ]
+    },
+    {
+      "id": "analytics-umami",
+      "name": "Umami Analytics",
+      "category": "analytics",
+      "badge": "VPS 13 Production",
+      "url": "http://127.0.0.1:3005",
+      "status": "online",
+      "description": "Zero-cookie privacy analytics platform for Buildeon Solutions, referral loops, and conversion telemetry.",
+      "icon": "📊",
+      "credentials": {
+        "username": "admin",
+        "hint": "Master Password controls Umami Admin access"
+      },
+      "subplatforms": [
+        {
+          "name": "Umami Dashboard (Tunnel)",
+          "url": "http://127.0.0.1:3005",
+          "icon": "📊",
+          "description": "Login: admin / umami (SSH Tunnel: port 3005)"
+        },
+        {
+          "name": "Public Analytics Telemetry",
+          "url": "https://analytics.buildeon.agency/script.js",
+          "icon": "⚡",
+          "description": "Public script endpoint & telemetry send ingest"
+        },
+        {
+          "name": "Google Search Console",
+          "url": "https://search.google.com/search-console?resource_id=sc-domain:buildeon.solutions",
+          "icon": "🔍",
+          "description": "Search impressions, organic keywords, and indexing status."
+        },
+        {
+          "name": "Bing Webmaster Tools",
+          "url": "https://www.bing.com/webmasters/",
+          "icon": "🌐",
+          "description": "Bing organic crawl telemetry & IndexNow instant syndication."
+        }
+      ]
+    },
+    {
+      "id": "content-postiz",
+      "name": "Postiz Social Ops",
+      "category": "marketing",
+      "badge": "VPS 13 Production",
+      "url": "https://postiz.buildeon.agency",
+      "status": "online",
+      "description": "Social media scheduling, LinkedIn API syndication, and X (Twitter) automated audience distribution pipeline.",
+      "icon": "📢",
+      "credentials": {
+        "username": "buildeonhq@gmail.com",
+        "hint": "Master Password controls Postiz & OAuth credentials"
+      },
+      "subplatforms": [
+        {
+          "name": "Postiz Web Workspace",
+          "url": "https://postiz.buildeon.agency",
+          "icon": "📢",
+          "description": "Post scheduling, multi-account calendar, and analytics."
+        },
+        {
+          "name": "LinkedIn Developer Portal",
+          "url": "https://www.linkedin.com/developers/apps",
+          "icon": "💼",
+          "description": "OAuth app ID: 77o83lionlxi2v"
+        },
+        {
+          "name": "X (Twitter) Developer Portal",
+          "url": "https://developer.x.com/en/portal/dashboard",
+          "icon": "🐦",
+          "description": "OAuth 2.0 app ID: aUQyRnk2S2VIR29MZndvYzI3Qks6MTpjaQ"
+        }
+      ]
+    },
+    {
+      "id": "safevault-woocommerce",
+      "name": "SafeVault WooCommerce",
+      "category": "commerce",
+      "badge": "VPS 185 Staging",
+      "url": "https://staging-shop.safevault.zone/wp-admin/",
+      "status": "online",
+      "description": "Enterprise WooCommerce staging cluster with headless REST API, custom payment gateways, and product catalog.",
+      "icon": "🛒",
+      "credentials": {
+        "username": "admin",
+        "hint": "Master Password controls SafeVault WP Admin: admin / 998a8935c139e7cdf9bb62c1"
+      },
+      "subplatforms": [
+        {
+          "name": "SafeVault Staging WP Admin",
+          "url": "https://staging-shop.safevault.zone/wp-admin/",
+          "icon": "🔑",
+          "description": "User: admin (password in vault)"
+        },
+        {
+          "name": "SafeVault Staging Storefront",
+          "url": "https://staging-shop.safevault.zone",
+          "icon": "🛍️",
+          "description": "Live staging storefront (tunnel or staging DNS)"
+        },
+        {
+          "name": "SafeVault Production Host (WIP)",
+          "url": "http://safevault-wordpress-309dc6-13-140-160-189.sslip.io",
+          "icon": "🔒",
+          "description": "Clean production WordPress MySQL container on VPS 13"
+        }
+      ]
+    },
+    {
+      "id": "safevault-n8n",
+      "name": "n8n Automation Engine",
+      "category": "automation",
+      "badge": "VPS 185 Orchestrator",
+      "url": "https://staging-n8n.wakqasahmed.com",
+      "status": "online",
+      "description": "Self-hosted workflow automation platform triggering AI pipelines, webhook relays, and database sync.",
+      "icon": "⚙️",
+      "credentials": {
+        "username": "buy2give_admin",
+        "hint": "Master Password controls n8n Basic Auth & API keys"
+      },
+      "subplatforms": [
+        {
+          "name": "n8n Staging Dashboard",
+          "url": "https://staging-n8n.wakqasahmed.com",
+          "icon": "⚙️",
+          "description": "Interactive workflow canvas (SSH tunnel: port 5678)"
+        },
+        {
+          "name": "Buy2Give Production Stack",
+          "url": "https://staging-n8n.wakqasahmed.com",
+          "icon": "🛡️",
+          "description": "Auth: buy2give_admin / Buy2GiveAdministrator2025#"
+        }
+      ]
+    },
+    {
+      "id": "ai-paperclip",
+      "name": "Paperclip AI Operations",
+      "category": "ai",
+      "badge": "VPS 185 AI Ops",
+      "url": "https://paperclip.buy2give.store",
+      "status": "online",
+      "description": "Multi-agent company orchestrator, budget governance, task delegation, and vector-search memory.",
+      "icon": "📎",
+      "credentials": {
+        "username": "wakqasahmed@gmail.com",
+        "hint": "Master Password controls Paperclip: wakqasahmed@gmail.com / KLzxbQ8unWKdIIgzHMX5ftpN"
+      },
+      "subplatforms": [
+        {
+          "name": "Paperclip Platform UI",
+          "url": "https://paperclip.buy2give.store",
+          "icon": "📎",
+          "description": "Login: wakqasahmed@gmail.com (port 3100)"
+        },
+        {
+          "name": "Opsome Staging App",
+          "url": "https://staging-app.aiopsome.com",
+          "icon": "🚀",
+          "description": "Founder: aiopsome@gmail.com"
+        },
+        {
+          "name": "Opsome Docs & Decks",
+          "url": "https://docs.aiopsome.com",
+          "icon": "📚",
+          "description": "Basic Auth: decks / DxhuJTE08B5Fz0x8QEiPv1"
+        }
+      ]
+    },
+    {
+      "id": "ai-omniroute",
+      "name": "OmniRoute & Rotki Gateway",
+      "category": "ai",
+      "badge": "VPS 185 Loopback",
+      "url": "http://127.0.0.1:20128",
+      "status": "online",
+      "description": "Unified loopback LLM routing gateway for Claude Code CLI, OpenAI models, and local Rotki portfolio tracking.",
+      "icon": "🔀",
+      "credentials": {
+        "username": "admin",
+        "hint": "Master Password controls OmniRoute: 46IHXO6OtHq3EFKl4sDnyQhCgVjs"
+      },
+      "subplatforms": [
+        {
+          "name": "OmniRoute Dashboard (Tunnel)",
+          "url": "http://127.0.0.1:20128",
+          "icon": "🔀",
+          "description": "Auth: 46IHXO6OtHq3EFKl4sDnyQhCgVjs (port 20128)"
+        },
+        {
+          "name": "OmniRoute API Endpoint",
+          "url": "http://127.0.0.1:20129",
+          "icon": "🔌",
+          "description": "Local proxy port for Claude Code CLI (port 20129)"
+        },
+        {
+          "name": "Rotki Crypto Portfolio (Tunnel)",
+          "url": "http://127.0.0.1:8084",
+          "icon": "🪙",
+          "description": "Personal cryptocurrency tracker (port 8084)"
+        }
+      ]
+    },
+    {
+      "id": "inbound-flowform",
+      "name": "FlowForm Inbound Engine",
+      "category": "inbound",
+      "badge": "VPS 13 Production",
+      "url": "https://demo.flowformhq.com",
+      "status": "online",
+      "description": "Headless form relay with field-level AES-256 encryption, multi-tenant workflows, and webhook dispatch.",
+      "icon": "📝",
+      "credentials": {
+        "username": "admin@flowformhq.com",
+        "hint": "Master Password controls FlowForm Engine Admin"
+      },
+      "subplatforms": [
+        {
+          "name": "FlowForm Interactive Demo",
+          "url": "https://demo.flowformhq.com",
+          "icon": "✨",
+          "description": "Live interactive form engine sandbox"
+        },
+        {
+          "name": "FlowForm Marketing Apex",
+          "url": "https://flowformhq.com",
+          "icon": "🌐",
+          "description": "Official marketing site & documentation"
+        },
+        {
+          "name": "FlowForm Docs",
+          "url": "https://docs.flowformhq.com",
+          "icon": "📖",
+          "description": "Developer guides & API reference"
+        }
+      ]
+    },
+    {
+      "id": "signalops-fleet",
+      "name": "SignalOps & InboxOps Fleet",
+      "category": "inbound",
+      "badge": "VPS 185 Staging",
+      "url": "https://stg-dashboard.signalops.agency",
+      "status": "online",
+      "description": "Omnichannel communication gateway with WAHA (WhatsApp HTTP API), Odoo ERP sync, and InboxOps.",
+      "icon": "📡",
+      "credentials": {
+        "username": "admin",
+        "hint": "Master Password controls WAHA & SignalOps keys"
+      },
+      "subplatforms": [
+        {
+          "name": "SignalOps Dashboard",
+          "url": "https://stg-dashboard.signalops.agency",
+          "icon": "📡",
+          "description": "Pass: bTT0yWmKZiAKduKViBH6"
+        },
+        {
+          "name": "WAHA WhatsApp API Console",
+          "url": "https://stg-waha.signalops.agency",
+          "icon": "💬",
+          "description": "Auth: admin / 8d967edc3acab5f8458f3221"
+        },
+        {
+          "name": "SignalOps Marketing Staging",
+          "url": "https://staging.signalops.agency",
+          "icon": "🌐",
+          "description": "Staging apex site"
+        }
+      ]
+    },
+    {
+      "id": "newsletter-ghost",
+      "name": "Ghost Newsletter & Portfolio",
+      "category": "marketing",
+      "badge": "VPS 185 Staging",
+      "url": "https://staging-newsletter.wakqasahmed.com/ghost/",
+      "status": "online",
+      "description": "Independent publication platform with Amazon SES email delivery, subscriber management, and portfolio.",
+      "icon": "👻",
+      "credentials": {
+        "username": "newsletter@wakqasahmed.com",
+        "hint": "Master Password controls Ghost Admin & SES credentials"
+      },
+      "subplatforms": [
+        {
+          "name": "Ghost Newsletter Admin",
+          "url": "https://staging-newsletter.wakqasahmed.com/ghost/",
+          "icon": "👻",
+          "description": "Admin Portal (SSH tunnel: port 2368)"
+        },
+        {
+          "name": "Personal Portfolio (Staging)",
+          "url": "https://staging.wakqasahmed.com",
+          "icon": "👤",
+          "description": "Wakqas Ahmed personal portfolio"
+        },
+        {
+          "name": "Production Ghost Container (VPS 13)",
+          "url": "http://127.0.0.1:8088/blog",
+          "icon": "📰",
+          "description": "Production Ghost blog container (port 8088)"
+        }
+      ]
+    },
+    {
+      "id": "commerce-telemetry",
+      "name": "Commerce Observability & Radar",
+      "category": "analytics",
+      "badge": "Buildeon Diagnostic",
+      "url": "https://radar.buildeon.solutions",
+      "status": "online",
+      "description": "Telemetry audits for margin bleed, platform sync bottlenecks, and AI stack detection.",
+      "icon": "🔬",
+      "subplatforms": [
+        {
+          "name": "Buildeon Radar / Stack Detector",
+          "url": "https://radar.buildeon.solutions",
+          "icon": "⚡",
+          "description": "Node.js RDAP/ECDB commerce technology analyzer (port 3002)."
+        },
+        {
+          "name": "Store Margin Audit Diagnostic",
+          "url": "https://buildeon.solutions/tools/margin-audit/",
+          "icon": "💰",
+          "description": "Interactive 3-tier margin bleed & geological era calculator."
+        },
+        {
+          "name": "Open-Source Directory Hub",
+          "url": "https://buildeon.solutions/directory/",
+          "icon": "📚",
+          "description": "Catalog of 40+ verified open-source engines."
+        }
+      ]
+    }
+  ]
+}
