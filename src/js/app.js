@@ -47,17 +47,32 @@
   }
 
   function resolvePresetName() {
+    const host = window.location.hostname.toLowerCase();
+    // Strictly bind dedicated subdomains to prevent preset switching or leaks
+    if (host.includes('sharafdg')) return 'sharafdg';
+    if (host.includes('tools')) return 'buildeon-fleet';
+
     const params = new URLSearchParams(window.location.search);
     const queryPreset = params.get('preset');
     if (queryPreset) return queryPreset;
 
-    const host = window.location.hostname.toLowerCase();
-    if (host.includes('sharafdg')) return 'sharafdg';
-    if (host.includes('tools')) return 'buildeon-fleet';
     return 'demo';
   }
 
   async function loadPreset(presetName) {
+    const host = window.location.hostname.toLowerCase();
+    const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
+
+    // On dedicated subdomains, completely remove preset selector
+    if (presetSelector) {
+      if (isDedicatedHost) {
+        presetSelector.style.display = 'none';
+      } else {
+        presetSelector.style.display = 'inline-block';
+        presetSelector.value = presetName;
+      }
+    }
+
     try {
       const response = await fetch(`/src/presets/${presetName}.json`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -91,9 +106,9 @@
     if (activePresetData.brand) {
       theme.apply(activePresetData.brand);
 
-      // Handle Theme Customizer Visibility
+      // Handle Theme Customizer Visibility: never show on dedicated subdomains or when disabled
       if (themeCustomizerSection) {
-        if (activePresetData.brand.allowThemeCustomizer === false) {
+        if (activePresetData.brand.allowThemeCustomizer === false || isDedicatedHost) {
           themeCustomizerSection.style.display = 'none';
         } else {
           themeCustomizerSection.style.display = 'flex';
@@ -139,6 +154,8 @@
     if (themeCustomizerSection) themeCustomizerSection.style.display = 'none';
     const controlsBar = document.querySelector('.controls-bar');
     if (controlsBar) controlsBar.style.display = 'none';
+    const headerActions = document.querySelector('.header-actions');
+    if (headerActions) headerActions.style.display = 'none';
 
     const brandName = preset.brand?.name || 'Enterprise';
     const title = preset.accessControl?.promptTitle || 'Restricted Executive Demo';
@@ -186,6 +203,12 @@
         if (code === required) {
           localStorage.setItem('dock_invite_' + preset.dockId, required);
           showToast(`Access granted: Welcome to ${brandName} Operations`);
+          if (headerActions) headerActions.style.display = 'flex';
+          const host = window.location.hostname.toLowerCase();
+          const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
+          if (presetSelector) {
+            presetSelector.style.display = isDedicatedHost ? 'none' : 'inline-block';
+          }
           if (controlsBar) controlsBar.style.display = 'flex';
           renderServices();
         } else {
@@ -222,6 +245,21 @@
   // --- Rendering ---
   async function renderServices() {
     if (!servicesContainer || !activePresetData) return;
+
+    // Strict security check: do not render services or expose controls if unauthorized
+    if (activePresetData.accessControl?.inviteOnly && !isInviteAuthorized(activePresetData)) {
+      renderInviteGate(activePresetData);
+      return;
+    }
+
+    const headerActions = document.querySelector('.header-actions');
+    if (headerActions) headerActions.style.display = 'flex';
+
+    const host = window.location.hostname.toLowerCase();
+    const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
+    if (presetSelector) {
+      presetSelector.style.display = isDedicatedHost ? 'none' : 'inline-block';
+    }
 
     const controlsBar = document.querySelector('.controls-bar');
     if (controlsBar) controlsBar.style.display = 'flex';
@@ -502,6 +540,9 @@
   if (wipeVaultBtn) {
     wipeVaultBtn.addEventListener('click', () => {
       if (confirm('Warning: This will permanently wipe local encrypted secrets from this browser. Proceed?')) {
+        if (activePresetData?.accessControl?.inviteOnly) {
+          localStorage.removeItem('dock_invite_' + activePresetData.dockId);
+        }
         vault.wipe();
         showToast('Vault wiped from local storage.');
       }
@@ -534,14 +575,20 @@
 
   // Preset Selector
   if (presetSelector) {
-    presetSelector.value = resolvePresetName();
-    presetSelector.addEventListener('change', (e) => {
-      const chosen = e.target.value;
-      const url = new URL(window.location);
-      url.searchParams.set('preset', chosen);
-      window.history.pushState({}, '', url);
-      loadPreset(chosen);
-    });
+    const host = window.location.hostname.toLowerCase();
+    const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
+    if (isDedicatedHost) {
+      presetSelector.style.display = 'none';
+    } else {
+      presetSelector.value = resolvePresetName();
+      presetSelector.addEventListener('change', (e) => {
+        const chosen = e.target.value;
+        const url = new URL(window.location);
+        url.searchParams.set('preset', chosen);
+        window.history.pushState({}, '', url);
+        loadPreset(chosen);
+      });
+    }
   }
 
   // Vault state subscriber
