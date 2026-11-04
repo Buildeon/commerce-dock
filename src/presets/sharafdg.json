@@ -10,6 +10,12 @@
     "bgColor": "#0b1329",
     "allowThemeCustomizer": false
   },
+  "accessControl": {
+    "inviteOnly": true,
+    "inviteCode": "SDG-ENTERPRISE-2026",
+    "promptTitle": "Restricted Executive Demo",
+    "promptMessage": "This tailored operations cockpit contains confidential omnichannel architecture and internal tools for Sharaf DG. Access is restricted to authorized team members and invited reviewers."
+  },
   "services": [
     {
       "id": "sdg-oms",

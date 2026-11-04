@@ -106,7 +106,94 @@
       await autoSeedDemoCredentials();
     }
 
+    // Check invite access control if configured
+    if (activePresetData.accessControl?.inviteOnly && !isInviteAuthorized(activePresetData)) {
+      renderInviteGate(activePresetData);
+      return;
+    }
+
     renderServices();
+  }
+
+  function isInviteAuthorized(preset) {
+    if (!preset.accessControl?.inviteOnly) return true;
+    const requiredCode = String(preset.accessControl.inviteCode || '').trim().toLowerCase();
+    if (!requiredCode) return true;
+
+    // Check query param
+    const params = new URLSearchParams(window.location.search);
+    const queryInvite = String(params.get('invite') || '').trim().toLowerCase();
+    if (queryInvite === requiredCode) {
+      localStorage.setItem('dock_invite_' + preset.dockId, requiredCode);
+      return true;
+    }
+
+    // Check localStorage
+    const saved = String(localStorage.getItem('dock_invite_' + preset.dockId) || '').trim().toLowerCase();
+    return saved === requiredCode;
+  }
+
+  function renderInviteGate(preset) {
+    if (!servicesContainer) return;
+
+    if (themeCustomizerSection) themeCustomizerSection.style.display = 'none';
+    const controlsBar = document.querySelector('.controls-bar');
+    if (controlsBar) controlsBar.style.display = 'none';
+
+    const brandName = preset.brand?.name || 'Enterprise';
+    const title = preset.accessControl?.promptTitle || 'Restricted Executive Demo';
+    const msg = preset.accessControl?.promptMessage || 'This workspace is restricted to authorized team members and invited reviewers.';
+
+    servicesContainer.innerHTML = `
+      <div style="grid-column: 1 / -1; max-width: 520px; margin: 30px auto; padding: 36px 28px; background: var(--dock-card-bg); border: 1px solid var(--dock-border); border-radius: var(--radius-md); backdrop-filter: blur(12px); text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--dock-primary), var(--dock-secondary)); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px; box-shadow: 0 4px 16px var(--dock-glow);">
+          🔐
+        </div>
+        <h2 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 8px; color: var(--dock-text);">${escapeHtml(title)}</h2>
+        <p style="font-size: 0.85rem; color: var(--dock-text-muted); line-height: 1.5; margin-bottom: 24px;">
+          ${escapeHtml(msg)}
+        </p>
+
+        <form id="invite-gate-form" style="display: flex; flex-direction: column; gap: 14px; text-align: left;">
+          <div>
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--dock-text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">Invite Access Code</label>
+            <input type="password" id="gate-invite-input" class="form-control" placeholder="Enter your invite code" required autofocus style="padding: 10px 14px;" />
+          </div>
+          <div id="gate-error-msg" style="display: none; color: #f87171; font-size: 0.8rem;">
+            Invalid invite code. Please verify the code sent to your email.
+          </div>
+          <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 10px; font-weight: 700;">
+            Unlock Cockpit &rarr;
+          </button>
+        </form>
+
+        <p style="font-size: 0.75rem; color: var(--dock-text-muted); margin-top: 20px;">
+          Protected by Buildeon Sovereign Ingress · Zero Public Stack Exposure
+        </p>
+      </div>
+    `;
+
+    const form = document.getElementById('invite-gate-form');
+    const input = document.getElementById('gate-invite-input');
+    const errorEl = document.getElementById('gate-error-msg');
+
+    if (form && input) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const code = input.value.trim().toLowerCase();
+        const required = String(preset.accessControl?.inviteCode || '').trim().toLowerCase();
+
+        if (code === required) {
+          localStorage.setItem('dock_invite_' + preset.dockId, required);
+          showToast(`Access granted: Welcome to ${brandName} Operations`);
+          if (controlsBar) controlsBar.style.display = 'flex';
+          renderServices();
+        } else {
+          if (errorEl) errorEl.style.display = 'block';
+          input.focus();
+        }
+      });
+    }
   }
 
   async function autoSeedDemoCredentials() {
@@ -135,6 +222,9 @@
   // --- Rendering ---
   async function renderServices() {
     if (!servicesContainer || !activePresetData) return;
+
+    const controlsBar = document.querySelector('.controls-bar');
+    if (controlsBar) controlsBar.style.display = 'flex';
 
     const services = activePresetData.services || [];
     const filtered = services.filter(service => {
