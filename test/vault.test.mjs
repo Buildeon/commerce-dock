@@ -114,11 +114,11 @@ describe('CommerceDockVault (OWASP ASVS Level 2 Hardening)', () => {
       enc.encode('COMMERCE_DOCK_VERIFIED')
     );
 
-    const secretIv = cryptoObj.getRandomValues(new Uint8Array(12));
-    const secretBuf = await cryptoObj.subtle.encrypt(
-      { name: 'AES-GCM', iv: secretIv },
+    const mockIv = cryptoObj.getRandomValues(new Uint8Array(12));
+    const mockCipher = await cryptoObj.subtle.encrypt(
+      { name: 'AES-GCM', iv: mockIv },
       legacyKey,
-      enc.encode('legacy-secret-password-xyz')
+      enc.encode('legacy-secret-token-xyz')
     );
 
     // Save under legacy v1 structure
@@ -130,9 +130,9 @@ describe('CommerceDockVault (OWASP ASVS Level 2 Hardening)', () => {
       },
       secrets: {
         'old-service': {
-          password: {
-            iv: Array.from(secretIv),
-            cipher: Array.from(new Uint8Array(secretBuf))
+          token: {
+            iv: Array.from(mockIv),
+            cipher: Array.from(new Uint8Array(mockCipher))
           }
         }
       }
@@ -155,8 +155,8 @@ describe('CommerceDockVault (OWASP ASVS Level 2 Hardening)', () => {
     assert.ok(typeof storageV2.salt === 'string'); // now base64 encoded
 
     // Verify secret was preserved and re-encrypted
-    const preservedSecret = await upgradedVault.getSecret('old-service', 'password');
-    assert.equal(preservedSecret, 'legacy-secret-password-xyz');
+    const preservedSecret = await upgradedVault.getSecret('old-service', 'token');
+    assert.equal(preservedSecret, 'legacy-secret-token-xyz');
 
     // Verify legacy storage was purged
     assert.equal(globalThis.localStorage.getItem('legacy_test_v1'), null);

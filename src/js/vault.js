@@ -288,11 +288,21 @@ class CommerceDockVault {
     const newKey = await this.deriveKey(masterPassword, newSalt, CommerceDockVault.PBKDF2_ITERATIONS);
     const newCheck = await this.encryptRaw('COMMERCE_DOCK_VERIFIED_V2', newKey);
 
+    const enc = new TextEncoder();
     const newSecrets = {};
     for (const [serviceId, fields] of Object.entries(decryptedSecrets)) {
       newSecrets[serviceId] = {};
       for (const [field, plainText] of Object.entries(fields)) {
-        newSecrets[serviceId][field] = await this.encryptRaw(plainText, newKey);
+        const iv = cryptoObj.getRandomValues(new Uint8Array(CommerceDockVault.IV_LENGTH));
+        const cipherBuffer = await cryptoObj.subtle.encrypt(
+          { name: 'AES-GCM', iv },
+          newKey,
+          enc.encode(plainText)
+        );
+        newSecrets[serviceId][field] = {
+          iv: CommerceDockVault.uint8ToBase64(iv),
+          ciphertext: CommerceDockVault.uint8ToBase64(new Uint8Array(cipherBuffer))
+        };
       }
     }
 
