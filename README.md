@@ -132,6 +132,6 @@ npm run build
 
 ## Contributing & License
 
-Contributions, presets for popular platforms, and security enhancements are warmly welcomed. Please review [SECURITY.md](./SECURITY.md) for vulnerability disclosure guidelines.
+Contributions, presets for popular platforms, and security enhancements are warmly welcomed. Please review [CONTRIBUTING.md](./CONTRIBUTING.md) for our issue-first workflow and verification standards, and [SECURITY.md](./SECURITY.md) for vulnerability disclosure guidelines.
 
 Distributed under the **Apache-2.0 License**. Crafted with precision by [Buildeon Solutions](https://buildeon.solutions).
