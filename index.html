@@ -39,6 +39,11 @@
           Unlock Vault
         </button>
 
+        <!-- Visual Stack Configurator -->
+        <button id="open-config-modal-btn" class="btn btn-outline btn-sm" title="Add or Configure Stack Services">
+          ➕ Add Tool
+        </button>
+
         <!-- Backup Vault -->
         <button id="export-vault-btn" class="btn btn-outline btn-sm" title="Export Zero-Knowledge Encrypted Backup (.cdvault)">
           💾 Backup / Restore
@@ -160,6 +165,114 @@
           <button class="btn btn-primary btn-sm" id="io-submit-btn" style="display: none;">Import Payload</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Visual Stack Configurator Modal -->
+  <div class="modal-overlay" id="config-modal">
+    <div class="modal-card" style="max-width: 640px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h3 id="config-modal-title">Visual Stack Configurator</h3>
+        <button class="close-btn" id="close-config-modal">&times;</button>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--dock-text-muted); margin-bottom: 16px; line-height: 1.4;">
+        Add or customize platforms in your sovereign cockpit. Select a pre-configured template or create a custom service.
+      </p>
+
+      <!-- Quick Template Selector -->
+      <div class="form-group">
+        <label>Quick Service Templates</label>
+        <div class="template-chips-grid" id="template-chips-container">
+          <!-- Injected dynamically by app.js -->
+        </div>
+      </div>
+
+      <form id="config-service-form">
+        <input type="hidden" id="cfg-service-id" value="" />
+
+        <div style="display: grid; grid-template-columns: 80px 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="cfg-icon">Icon</label>
+            <input type="text" id="cfg-icon" class="form-control" style="text-align: center; font-size: 1.2rem;" value="📦" required />
+          </div>
+          <div class="form-group">
+            <label for="cfg-name">Service Name *</label>
+            <input type="text" id="cfg-name" class="form-control" placeholder="e.g. Adobe Commerce / Akeneo" required />
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label for="cfg-category">Category *</label>
+            <select id="cfg-category" class="form-control" required>
+              <option value="commerce">Commerce</option>
+              <option value="analytics">Analytics</option>
+              <option value="automation">Automation</option>
+              <option value="ai">AI & LLM</option>
+              <option value="infra">Infra</option>
+              <option value="marketing">Marketing</option>
+              <option value="inbound">Inbound</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cfg-badge">Status Badge (Optional)</label>
+            <input type="text" id="cfg-badge" class="form-control" placeholder="e.g. Production / Staging / v2.4" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="cfg-url">Primary Service URL *</label>
+          <input type="url" id="cfg-url" class="form-control" placeholder="https://..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="cfg-health-url">Live Health Probe URL / Path (Optional)</label>
+          <input type="text" id="cfg-health-url" class="form-control" placeholder="e.g. /healthz or https://... (OWASP SSRF protected)" />
+        </div>
+
+        <div class="form-group">
+          <label for="cfg-desc">Description</label>
+          <input type="text" id="cfg-desc" class="form-control" placeholder="Brief description of this component..." />
+        </div>
+
+        <!-- Subplatforms Builder -->
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="margin-bottom: 0;">Subplatform Accordions (Environments / DBs)</label>
+            <button type="button" class="btn btn-outline btn-sm" id="cfg-add-subplatform-btn" style="padding: 2px 8px; font-size: 0.75rem;">+ Add Subplatform</button>
+          </div>
+          <div id="cfg-subplatforms-list" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Optional In-Vault Credentials -->
+        <div class="form-group" id="cfg-vault-credentials-group">
+          <label>Encrypted Vault Credentials (Client-Side AES-256-GCM)</label>
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--dock-border); border-radius: var(--radius-sm); padding: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label for="cfg-username" style="font-size: 0.75rem;">Username / Email</label>
+              <input type="text" id="cfg-username" class="form-control" style="font-size: 0.8rem; padding: 6px 10px;" placeholder="admin@..." />
+            </div>
+            <div>
+              <label for="cfg-password" style="font-size: 0.75rem;">Password / Token</label>
+              <input type="password" id="cfg-password" class="form-control" style="font-size: 0.8rem; padding: 6px 10px;" placeholder="••••••••" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--dock-border);">
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn btn-outline btn-sm" id="cfg-export-preset-btn">⬇️ Export JSON</button>
+            <button type="button" class="btn btn-outline btn-sm" id="cfg-import-preset-trigger">📂 Import JSON</button>
+            <input type="file" id="cfg-import-preset-file" accept=".json" style="display: none;" />
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-outline btn-sm" id="close-config-modal-btn">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm" id="cfg-save-btn">Save to Dock</button>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 

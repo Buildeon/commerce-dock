@@ -50,6 +50,31 @@ import { CommerceDockPulse } from './pulse.js';
 
   const toastEl = document.getElementById('toast');
 
+  // Visual Stack Configurator Elements
+  const configModal = document.getElementById('config-modal');
+  const openConfigModalBtn = document.getElementById('open-config-modal-btn');
+  const closeConfigModalBtn = document.getElementById('close-config-modal');
+  const closeConfigModalActionBtn = document.getElementById('close-config-modal-btn');
+  const configServiceForm = document.getElementById('config-service-form');
+  const configModalTitle = document.getElementById('config-modal-title');
+  const templateChipsContainer = document.getElementById('template-chips-container');
+  const cfgAddSubplatformBtn = document.getElementById('cfg-add-subplatform-btn');
+  const cfgSubplatformsList = document.getElementById('cfg-subplatforms-list');
+  const cfgExportPresetBtn = document.getElementById('cfg-export-preset-btn');
+  const cfgImportPresetTrigger = document.getElementById('cfg-import-preset-trigger');
+  const cfgImportPresetFile = document.getElementById('cfg-import-preset-file');
+
+  const cfgServiceId = document.getElementById('cfg-service-id');
+  const cfgIcon = document.getElementById('cfg-icon');
+  const cfgName = document.getElementById('cfg-name');
+  const cfgCategory = document.getElementById('cfg-category');
+  const cfgBadge = document.getElementById('cfg-badge');
+  const cfgUrl = document.getElementById('cfg-url');
+  const cfgHealthUrl = document.getElementById('cfg-health-url');
+  const cfgDesc = document.getElementById('cfg-desc');
+  const cfgUsername = document.getElementById('cfg-username');
+  const cfgPassword = document.getElementById('cfg-password');
+
   // --- Insecure Ingress Guard Banner ---
   const insecureBanner = document.getElementById('insecure-http-banner');
   if (insecureBanner && window.location.protocol === 'http:' && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
@@ -119,6 +144,20 @@ import { CommerceDockPulse } from './pulse.js';
     }
 
     if (!activePresetData) return;
+
+    // Load any customized stack services stored in localStorage
+    try {
+      const customKey = `commerce_dock_custom_services_${presetName}`;
+      const savedCustom = localStorage.getItem(customKey);
+      if (savedCustom) {
+        const parsed = JSON.parse(savedCustom);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          activePresetData.services = parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Could not load custom services from localStorage:', e);
+    }
 
     // Set page titles and metadata
     document.title = activePresetData.title || 'Commerce Dock';
@@ -404,6 +443,12 @@ import { CommerceDockPulse } from './pulse.js';
             <button class="btn btn-outline manage-vault-btn" data-service-id="${service.id}" title="Manage Secrets in Vault">
               🔑
             </button>
+            <button class="btn btn-outline edit-service-btn" data-service-id="${service.id}" title="Configure Service">
+              ⚙️
+            </button>
+            <button class="btn btn-outline delete-service-btn" data-service-id="${service.id}" title="Remove Service from Dock" style="color: #ef4444;">
+              🗑️
+            </button>
           </div>
         </div>
       `;
@@ -457,6 +502,25 @@ import { CommerceDockPulse } from './pulse.js';
           return;
         }
         promptEditSecret(sId);
+      });
+    });
+
+    // Configure / Edit service buttons
+    document.querySelectorAll('.edit-service-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const sId = btn.getAttribute('data-service-id');
+        const s = activePresetData?.services?.find(item => item.id === sId);
+        if (s) openConfigModal(s);
+      });
+    });
+
+    // Delete service buttons
+    document.querySelectorAll('.delete-service-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const sId = btn.getAttribute('data-service-id');
+        handleDeleteService(sId);
       });
     });
   }
@@ -694,13 +758,275 @@ import { CommerceDockPulse } from './pulse.js';
 
   if (wipeVaultBtn) {
     wipeVaultBtn.addEventListener('click', () => {
-      if (confirm('Warning: This will permanently wipe local encrypted secrets from this browser. Proceed?')) {
+      if (confirm('Warning: This will permanently wipe local encrypted secrets and stack modifications from this browser. Proceed?')) {
+        const presetName = resolvePresetName();
         if (activePresetData?.accessControl?.inviteOnly) {
           localStorage.removeItem('dock_invite_' + activePresetData.dockId);
         }
+        localStorage.removeItem('commerce_dock_custom_services_' + presetName);
         vault.wipe();
-        showToast('Vault wiped from local storage.');
+        showToast('Vault and stack cache wiped from local storage.');
+        setTimeout(() => window.location.reload(), 1000);
       }
+    });
+  }
+
+  // --- Visual Stack Configurator Logic ---
+  const SERVICE_TEMPLATES = [
+    { name: 'Adobe Commerce', icon: '🛒', category: 'commerce', badge: 'Magento 2', url: 'https://commerce.yourbrand.com/admin', healthCheckUrl: '/health_check.php', description: 'Enterprise B2B/B2C storefront and catalog cluster.' },
+    { name: 'Medusa v2', icon: '🔀', category: 'commerce', badge: 'Headless', url: 'http://localhost:9000/app', healthCheckUrl: 'http://localhost:9000/health', description: 'Composable commerce engine with custom workflows.' },
+    { name: 'Shopify Plus', icon: '🛍️', category: 'commerce', badge: 'Headless', url: 'https://admin.shopify.com', healthCheckUrl: '', description: 'Omnichannel cloud storefront with custom app extensions.' },
+    { name: 'Akeneo PIM', icon: '🏷️', category: 'commerce', badge: 'PIM', url: 'https://pim.yourbrand.com', healthCheckUrl: '/api/rest/v1', description: 'Master catalog enrichment and attribute taxonomy.' },
+    { name: 'Algolia Search', icon: '⚡', category: 'commerce', badge: 'Search', url: 'https://dashboard.algolia.com', healthCheckUrl: '', description: 'Fast product discovery, instant search, and AI merchandising.' },
+    { name: 'Stripe Payments', icon: '💳', category: 'commerce', badge: 'Fintech', url: 'https://dashboard.stripe.com', healthCheckUrl: '', description: 'Global payment gateway and billing reconciliation.' },
+    { name: 'Strapi CMS', icon: '📝', category: 'infra', badge: 'Headless CMS', url: 'http://localhost:1337/admin', healthCheckUrl: 'http://localhost:1337/_health', description: 'Headless content management system for storefronts.' },
+    { name: 'n8n Workflows', icon: '🔄', category: 'automation', badge: 'Workflows', url: 'http://localhost:5678', healthCheckUrl: 'http://localhost:5678/healthz', description: 'Self-hosted workflow automation for ERP and catalog sync.' },
+    { name: 'Supabase Postgres', icon: '🗄️', category: 'infra', badge: 'Postgres', url: 'http://localhost:54323', healthCheckUrl: 'http://localhost:54323/health', description: 'Managed database, row-level security, and auth services.' },
+    { name: 'PostHog Analytics', icon: '📊', category: 'analytics', badge: 'Analytics', url: 'https://eu.posthog.com', healthCheckUrl: '', description: 'Product analytics, session replays, and feature flags.' },
+    { name: 'OmniRoute AI', icon: '🤖', category: 'ai', badge: 'LLM Gateway', url: 'http://localhost:4000', healthCheckUrl: 'http://localhost:4000/health', description: 'Unified LLM routing for Claude CLI and OpenAI models.' },
+    { name: 'Custom Platform', icon: '🌐', category: 'commerce', badge: 'Custom', url: 'https://', healthCheckUrl: '', description: 'Custom operational endpoint or internal tool.' }
+  ];
+
+  function persistCustomServices() {
+    if (!activePresetData || !activePresetData.services) return;
+    try {
+      const presetName = resolvePresetName();
+      const customKey = `commerce_dock_custom_services_${presetName}`;
+      localStorage.setItem(customKey, JSON.stringify(activePresetData.services));
+    } catch (e) {
+      console.warn('Failed to persist custom services:', e);
+    }
+  }
+
+  function renderTemplateChips() {
+    if (!templateChipsContainer) return;
+    templateChipsContainer.innerHTML = SERVICE_TEMPLATES.map((tmpl, idx) => `
+      <div class="template-chip" data-template-idx="${idx}">
+        <span>${tmpl.icon}</span>
+        <span>${escapeHtml(tmpl.name)}</span>
+      </div>
+    `).join('');
+
+    templateChipsContainer.querySelectorAll('.template-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const idx = Number(chip.getAttribute('data-template-idx'));
+        const tmpl = SERVICE_TEMPLATES[idx];
+        if (!tmpl) return;
+        applyTemplateToForm(tmpl);
+      });
+    });
+  }
+
+  function applyTemplateToForm(tmpl) {
+    if (cfgName) cfgName.value = tmpl.name;
+    if (cfgIcon) cfgIcon.value = tmpl.icon;
+    if (cfgCategory) cfgCategory.value = tmpl.category;
+    if (cfgBadge) cfgBadge.value = tmpl.badge || '';
+    if (cfgUrl) cfgUrl.value = tmpl.url || '';
+    if (cfgHealthUrl) cfgHealthUrl.value = tmpl.healthCheckUrl || '';
+    if (cfgDesc) cfgDesc.value = tmpl.description || '';
+  }
+
+  function addSubplatformRow(name = '', url = '', _icon = '🔗') {
+    if (!cfgSubplatformsList) return;
+    const row = document.createElement('div');
+    row.className = 'cfg-subplatform-row';
+    row.innerHTML = `
+      <input type="text" class="form-control cfg-sp-name" style="font-size: 0.8rem; padding: 6px 8px;" placeholder="Name (e.g. Staging)" value="${escapeHtml(name)}" required />
+      <input type="url" class="form-control cfg-sp-url" style="font-size: 0.8rem; padding: 6px 8px;" placeholder="https://..." value="${escapeHtml(url)}" required />
+      <button type="button" class="remove-subplatform-btn" title="Remove">&times;</button>
+    `;
+    const removeBtn = row.querySelector('.remove-subplatform-btn');
+    if (removeBtn) {
+      removeBtn.addEventListener('click', () => {
+        row.remove();
+      });
+    }
+    cfgSubplatformsList.appendChild(row);
+  }
+
+  function openConfigModal(service = null) {
+    if (!configModal) return;
+    renderTemplateChips();
+    if (cfgSubplatformsList) cfgSubplatformsList.innerHTML = '';
+
+    if (service) {
+      if (configModalTitle) configModalTitle.textContent = `Configure Service: ${service.name}`;
+      if (cfgServiceId) cfgServiceId.value = service.id;
+      if (cfgName) cfgName.value = service.name;
+      if (cfgIcon) cfgIcon.value = service.icon || '📦';
+      if (cfgCategory) cfgCategory.value = service.category || 'commerce';
+      if (cfgBadge) cfgBadge.value = service.badge || '';
+      if (cfgUrl) cfgUrl.value = service.url || '';
+      if (cfgHealthUrl) cfgHealthUrl.value = service.healthCheckUrl || '';
+      if (cfgDesc) cfgDesc.value = service.description || '';
+
+      if (service.subplatforms && service.subplatforms.length > 0) {
+        service.subplatforms.forEach(sp => addSubplatformRow(sp.name, sp.url, sp.icon));
+      }
+    } else {
+      if (configModalTitle) configModalTitle.textContent = 'Add Platform to Stack';
+      if (cfgServiceId) cfgServiceId.value = '';
+      if (configServiceForm) configServiceForm.reset();
+      if (cfgIcon) cfgIcon.value = '📦';
+    }
+
+    if (cfgUsername) cfgUsername.value = '';
+    if (cfgPassword) cfgPassword.value = '';
+
+    configModal.classList.add('open');
+  }
+
+  function closeConfigModal() {
+    if (configModal) configModal.classList.remove('open');
+  }
+
+  async function handleConfigSubmit(e) {
+    e.preventDefault();
+    if (!activePresetData) return;
+    if (!activePresetData.services) activePresetData.services = [];
+
+    const isEdit = Boolean(cfgServiceId?.value);
+    const serviceName = cfgName?.value?.trim();
+    if (!serviceName) return;
+
+    const serviceId = isEdit 
+      ? cfgServiceId.value 
+      : serviceName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Math.random().toString(36).substring(2, 6);
+
+    // Collect subplatforms
+    const subplatforms = [];
+    if (cfgSubplatformsList) {
+      cfgSubplatformsList.querySelectorAll('.cfg-subplatform-row').forEach(row => {
+        const spName = row.querySelector('.cfg-sp-name')?.value?.trim();
+        const spUrl = row.querySelector('.cfg-sp-url')?.value?.trim();
+        if (spName && spUrl) {
+          subplatforms.push({ name: spName, url: spUrl, icon: '🔗' });
+        }
+      });
+    }
+
+    const serviceObj = {
+      id: serviceId,
+      name: serviceName,
+      icon: cfgIcon?.value?.trim() || '📦',
+      category: cfgCategory?.value || 'commerce',
+      badge: cfgBadge?.value?.trim() || '',
+      url: cfgUrl?.value?.trim() || '',
+      healthCheckUrl: cfgHealthUrl?.value?.trim() || '',
+      description: cfgDesc?.value?.trim() || '',
+      subplatforms: subplatforms
+    };
+
+    if (isEdit) {
+      const idx = activePresetData.services.findIndex(s => s.id === serviceId);
+      if (idx !== -1) {
+        activePresetData.services[idx] = { ...activePresetData.services[idx], ...serviceObj };
+      } else {
+        activePresetData.services.push(serviceObj);
+      }
+    } else {
+      activePresetData.services.push(serviceObj);
+    }
+
+    // Save encrypted credentials if provided and vault is unlocked
+    const username = cfgUsername?.value?.trim();
+    const password = cfgPassword?.value?.trim();
+    if ((username || password) && vault.isUnlocked()) {
+      try {
+        if (username) await vault.setSecret(serviceId, 'username', username);
+        if (password) await vault.setSecret(serviceId, 'password', password);
+        showToast(`Credentials encrypted into vault for ${serviceName}.`);
+      } catch (err) {
+        console.warn('Vault encryption warning:', err);
+      }
+    }
+
+    persistCustomServices();
+    closeConfigModal();
+    renderServices();
+    showToast(`Saved "${serviceName}" to active dock.`);
+  }
+
+  function handleDeleteService(serviceId) {
+    if (!activePresetData?.services) return;
+    const target = activePresetData.services.find(s => s.id === serviceId);
+    const name = target ? target.name : serviceId;
+    if (!confirm(`Remove "${name}" from your active stack?`)) return;
+
+    activePresetData.services = activePresetData.services.filter(s => s.id !== serviceId);
+    persistCustomServices();
+    renderServices();
+    showToast(`Removed "${name}" from dock.`);
+  }
+
+  function exportCustomPreset() {
+    if (!activePresetData) return;
+    const cleanPreset = JSON.parse(JSON.stringify(activePresetData));
+    const jsonStr = JSON.stringify(cleanPreset, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${resolvePresetName()}-stack-preset.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Exported stack preset JSON.');
+  }
+
+  function importCustomPresetFile(file) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result;
+        if (typeof content !== 'string') return;
+        const parsed = JSON.parse(content);
+        if (!parsed || !Array.isArray(parsed.services)) {
+          throw new Error('Invalid stack preset file format. Missing "services" array.');
+        }
+        activePresetData.services = parsed.services;
+        if (parsed.brand) theme.apply(parsed.brand);
+        persistCustomServices();
+        renderServices();
+        closeConfigModal();
+        showToast('Stack preset imported successfully.');
+      } catch (err) {
+        showToast('Failed to import preset: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Visual Configurator Event Listeners
+  if (openConfigModalBtn) {
+    openConfigModalBtn.addEventListener('click', () => openConfigModal(null));
+  }
+  if (closeConfigModalBtn) {
+    closeConfigModalBtn.addEventListener('click', closeConfigModal);
+  }
+  if (closeConfigModalActionBtn) {
+    closeConfigModalActionBtn.addEventListener('click', closeConfigModal);
+  }
+  if (configServiceForm) {
+    configServiceForm.addEventListener('submit', handleConfigSubmit);
+  }
+  if (cfgAddSubplatformBtn) {
+    cfgAddSubplatformBtn.addEventListener('click', () => addSubplatformRow('', '', '🔗'));
+  }
+  if (cfgExportPresetBtn) {
+    cfgExportPresetBtn.addEventListener('click', exportCustomPreset);
+  }
+  if (cfgImportPresetTrigger && cfgImportPresetFile) {
+    cfgImportPresetTrigger.addEventListener('click', () => {
+      cfgImportPresetFile.click();
+    });
+    cfgImportPresetFile.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (file) importCustomPresetFile(file);
+      cfgImportPresetFile.value = '';
     });
   }
 
