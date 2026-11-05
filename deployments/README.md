@@ -68,3 +68,37 @@ docker compose up -d
 ```
 
 The container binds strictly to `127.0.0.1:8089` to prevent bypassing Linux `ufw` firewall rules.
+
+---
+
+## 5. Unattended Automated Updates (Watchtower Blueprint)
+
+Commerce Dock is an immutable, stateless front-end container. You do not need to share master passwords or conduct manual maintenance calls to update images.
+
+You can configure **Watchtower** alongside Commerce Dock to automatically check for hardened releases and restart containers with zero downtime:
+
+```yaml
+services:
+  commerce-dock:
+    image: ghcr.io/buildeon/commerce-dock:latest
+    container_name: commerce-dock
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8089:80"
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: commerce-dock-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 86400 --cleanup --include-restarting commerce-dock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=86400
+```
+
+### Why This Preserves Zero-Knowledge Sovereignty
+* **Zero Password Custody**: Upgrades occur at the container layer. Master passwords remain exclusively inside the operator browser memory and are never exposed during image redeployments.
+* **Automatic Rollouts**: When a verified release is published to `ghcr.io`, Watchtower pulls the updated layer at off-peak hours (e.g. 3 AM) and gracefully restarts the container.
+* **Continuous State Persistence**: Because custom services and `.cdvault` data reside client-side in encrypted local storage, the refreshed container loads seamlessly without credential loss.
