@@ -1,0 +1,24 @@
+# Coolify Deployment Template for Commerce Dock
+# See deployments/README.md for setup instructions.
+
+version: '3.8'
+
+services:
+  commerce-dock:
+    image: ghcr.io/buildeon/commerce-dock:latest
+    restart: unless-stopped
+    environment:
+      - SERVICE_FQDN_COMMERCE_DOCK_80
+    expose:
+      - "80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

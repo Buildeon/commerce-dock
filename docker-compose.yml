@@ -7,7 +7,11 @@ services:
     container_name: commerce-dock
     restart: unless-stopped
     ports:
-      - "8089:80"
+      # SECURE DEFAULT: Bind strictly to loopback interface (127.0.0.1:8089).
+      # Binding to 0.0.0.0 bypasses host Linux firewall (ufw/iptables) rules by default in Docker.
+      # Commerce Dock is designed to sit safely behind a sovereign TLS ingress (Traefik,
+      # Cloudflare Tunnel, Tailscale, or WireGuard) rather than exposed directly to the public internet.
+      - "127.0.0.1:8089:80"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.commerce-dock.rule=Host(`tools.buildeon.agency`)"

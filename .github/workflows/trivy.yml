@@ -1,0 +1,46 @@
+name: Trivy Container Image Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '45 3 * * 2'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    name: Build & Scan Container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Local Container Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true
+          tags: buildeon/commerce-dock:test-scan
+
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'buildeon/commerce-dock:test-scan'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy Scan Results to GitHub Security Tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'

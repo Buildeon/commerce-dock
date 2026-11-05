@@ -40,8 +40,13 @@
         </button>
 
         <!-- Backup Vault -->
-        <button id="export-vault-btn" class="btn btn-outline btn-sm" title="Export Zero-Knowledge Encrypted Backup">
-          💾 Backup
+        <button id="export-vault-btn" class="btn btn-outline btn-sm" title="Export Zero-Knowledge Encrypted Backup (.cdvault)">
+          💾 Backup / Restore
+        </button>
+
+        <!-- Export AI MCP Stack Context -->
+        <button id="export-mcp-btn" class="btn btn-outline btn-sm" title="Export Sanitized Topology for AI Agents / MCP">
+          🤖 MCP Stack
         </button>
 
         <button id="wipe-vault-btn" class="btn btn-danger btn-sm" title="Wipe Local Vault Cache">
@@ -50,6 +55,12 @@
       </div>
     </div>
   </header>
+
+  <!-- Insecure Ingress Warning Banner (OWASP / Zero-Trust Guard) -->
+  <div id="insecure-http-banner" class="insecure-ingress-banner" style="display: none;">
+    <span>⚠️ <strong>Insecure Ingress Warning:</strong> Commerce Dock is running over unencrypted HTTP. To safeguard operational credentials, deploy behind Cloudflare Access, Tailscale, WireGuard, or Traefik with TLS.</span>
+    <button class="dismiss-banner-btn" id="dismiss-http-warning" aria-label="Dismiss">&times;</button>
+  </div>
 
   <main class="container">
     <!-- Hero / Stack Banner -->
@@ -124,22 +135,30 @@
     </div>
   </div>
 
-  <!-- Encrypted Vault Export/Backup Modal -->
+  <!-- Encrypted Vault Export/Backup & Agent Context Modal -->
   <div class="modal-overlay" id="io-modal">
-    <div class="modal-card" style="max-width: 640px;">
+    <div class="modal-card" style="max-width: 680px;">
       <div class="modal-header">
         <h3 id="io-modal-title">Zero-Knowledge Encrypted Vault Backup</h3>
         <button class="close-btn" id="close-io-modal">&times;</button>
       </div>
-      <p style="font-size: 0.82rem; color: var(--dock-text-muted); margin-bottom: 12px;">
-        Copy this encrypted JSON payload. It is fully encrypted with your master password key. It is safe to store in git or local disk.
+      <p id="io-modal-desc" style="font-size: 0.82rem; color: var(--dock-text-muted); margin-bottom: 12px; line-height: 1.4;">
+        Export or restore your server-blind AES-256-GCM vault payload. Keys and plaintext secrets are never transmitted.
       </p>
       <div class="form-group">
-        <textarea id="io-textarea" class="form-control" rows="12" readonly style="font-family: var(--font-mono); font-size: 0.78rem;"></textarea>
+        <textarea id="io-textarea" class="form-control" rows="11" style="font-family: var(--font-mono); font-size: 0.78rem;"></textarea>
       </div>
-      <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button class="btn btn-outline" id="close-io-modal-btn" onclick="document.getElementById('io-modal').classList.remove('open')">Close</button>
-        <button class="btn btn-primary" id="io-submit-btn" style="display: none;">Import</button>
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px;">
+        <div style="display: flex; gap: 6px;">
+          <button class="btn btn-outline btn-sm" id="download-cdvault-btn">⬇️ Download .cdvault</button>
+          <button class="btn btn-outline btn-sm" id="import-cdvault-trigger">📂 Import File</button>
+          <input type="file" id="cdvault-file-input" accept=".cdvault,.json" style="display: none;" />
+          <button class="btn btn-outline btn-sm" id="copy-io-btn">📋 Copy</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-outline btn-sm" id="close-io-modal-btn">Close</button>
+          <button class="btn btn-primary btn-sm" id="io-submit-btn" style="display: none;">Import Payload</button>
+        </div>
       </div>
     </div>
   </div>
@@ -152,15 +171,17 @@
     <div class="container">
       <p>
         <strong>Commerce Dock</strong> — Open Source Sovereign Operations Launcher & Stack Hub.
-        Crafted by <a href="https://buildeon.solutions" target="_blank" rel="noopener">Buildeon Solutions</a>.
-        Licensed under MIT. Open Source on <a href="https://github.com/Buildeon/commerce-dock" target="_blank" rel="noopener">GitHub</a>.
+        Crafted by <a href="https://buildeon.solutions" target="_blank" rel="noopener noreferrer">Buildeon Solutions</a>.
+        Licensed under Apache-2.0. Open Source on <a href="https://github.com/Buildeon/commerce-dock" target="_blank" rel="noopener noreferrer">GitHub</a>.
       </p>
     </div>
   </footer>
 
   <!-- Scripts -->
-  <script src="src/js/vault.js"></script>
-  <script src="src/js/theme.js"></script>
-  <script src="src/js/app.js"></script>
+  <script type="module" src="src/js/vault.js"></script>
+  <script type="module" src="src/js/theme.js"></script>
+  <script type="module" src="src/js/ssrf-validator.js"></script>
+  <script type="module" src="src/js/pulse.js"></script>
+  <script type="module" src="src/js/app.js"></script>
 </body>
 </html>

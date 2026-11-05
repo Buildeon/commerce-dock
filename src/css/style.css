@@ -661,3 +661,31 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Insecure Ingress Warning Banner */
+.insecure-ingress-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  font-size: 0.8rem;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.insecure-ingress-banner .dismiss-banner-btn {
+  background: none;
+  border: none;
+  color: #fca5a5;
+  font-size: 1.25rem;
+  cursor: pointer;
+  margin-left: 14px;
+  line-height: 1;
+}
+
+.insecure-ingress-banner .dismiss-banner-btn:hover {
+  color: #ffffff;
+}

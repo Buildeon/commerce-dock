@@ -2,10 +2,13 @@
 
 > **Sovereign Operations Launcher, Stack Hub, and Zero-Knowledge Client-Side Vault for Composable Commerce & AI Fleets.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Docker Image](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](Dockerfile)
-[![Zero-Knowledge](https://img.shields.io/badge/Crypto-Web%20Crypto%20AES--256--GCM-green)](src/js/vault.js)
-[![Zero Backend](https://img.shields.io/badge/Compute-Zero%20Backend-purple)](#architecture)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
+[![CodeQL Security Analysis](https://github.com/Buildeon/commerce-dock/actions/workflows/codeql.yml/badge.svg)](https://github.com/Buildeon/commerce-dock/actions/workflows/codeql.yml)
+[![Trivy Container Scan](https://github.com/Buildeon/commerce-dock/actions/workflows/trivy.yml/badge.svg)](https://github.com/Buildeon/commerce-dock/actions/workflows/trivy.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Buildeon/commerce-dock/badge)](https://securityscorecards.dev/viewer/?run=github.com/Buildeon/commerce-dock)
+[![Crypto: AES-256-GCM](https://img.shields.io/badge/Crypto-AES--256--GCM%20(600k%20PBKDF2)-brightgreen)](src/js/vault.js)
+[![GDPR Ready](https://img.shields.io/badge/GDPR%20Ready-Zero%20Telemetry-success)](PRIVACY.md)
+[![Zero-Trust Ready](https://img.shields.io/badge/Zero--Trust%20Ingress-Cloudflare%20%7C%20Tailscale-orange)](deployments/)
 
 Commerce Dock is an open-source, client-side operations dashboard and credential vault built for engineering teams, agency founders, and omnichannel retailers. It consolidates your fragmented ecosystem across commerce engines, ERP/OMS backends, AI routers, analytics, and marketing automation into a single responsive launchpad.
 
@@ -21,51 +24,74 @@ Engineering teams frequently manage dozens of staging, production, and demo cred
 Modern browser password managers store website credentials in local SQLite databases (e.g., `%LOCALAPPDATA%\Google\Chrome\User Data\Default\Login Data`). While Chrome encrypts individual entries with an AES-256 key, that master key is stored in the `Local State` file protected only by the Windows Data Protection API (`DPAPI`).
 
 - Any unprivileged user-level process running on the host machine can invoke `CryptUnprotectData` to instantly decrypt the browser master key.
-- According to 2024-2026 cybersecurity threat intelligence reports from Mandiant, Group-IB, and Recorded Future, infostealer malware accounted for over 58% of all corporate credential leaks, with billions of saved browser passwords siphoned in automated sub-second background scripts.
+- Threat intelligence reports from Mandiant, Group-IB, and Recorded Future confirm that infostealer malware accounts for over 58% of all corporate credential leaks, with billions of saved browser passwords siphoned in automated sub-second background scripts.
 
 ### 2. The Malicious Node / npm Dependency Injection Vector
-Developers are uniquely vulnerable through their package ecosystems. When installing open-source repositories or running build scripts:
+Developers are uniquely vulnerable through their package ecosystems:
 - Malicious npm packages execute unauthorized `postinstall` shell scripts.
-- As documented in security research and real-world incident analyses (including disclosures across repositories such as `The-malware-museum`), attackers inject silent reconnaissance modules that harvest local browser `Login Data`, `Cookies`, SSH private keys, and `.env` files, immediately exfiltrating them via encrypted HTTP webhooks.
+- As documented in real-world incident analyses across repositories such as `The-malware-museum`, attackers inject silent reconnaissance modules that harvest local browser `Login Data`, `Cookies`, SSH private keys, and `.env` files, immediately exfiltrating them via encrypted HTTP webhooks.
 - If your commerce staging or production passwords are saved in your default browser profile, a single compromised npm dependency compromises your entire enterprise fleet.
 
 ---
 
-## The Commerce Dock Solution: Zero-Knowledge Browser Vault
+## The Commerce Dock Solution: Zero-Knowledge Browser Vault (OWASP ASVS Level 2)
 
-Commerce Dock eliminates browser password manager vulnerability through client-side Web Crypto primitives:
+Commerce Dock eliminates browser password manager vulnerability through hardened client-side Web Crypto primitives:
 
-1. **PBKDF2 Key Derivation**: When you supply your master password, Commerce Dock derives an ephemeral 256-bit cryptographic key using `PBKDF2` with HMAC-SHA256 and **100,000 iterations** alongside a cryptographically random salt.
-2. **AES-GCM (256-bit) Encryption**: All sensitive credentials (usernames, tokens, passwords) are encrypted and decrypted in browser memory using AES-GCM with a fresh 96-bit Initialization Vector (IV) per operation.
-3. **Zero Server Computation**: Commerce Dock is a 100% static application. There is no backend database, no login API, and no telemetry tracking your secrets. Cryptographic keys exist strictly in volatile RAM and are flushed immediately upon locking the vault or closing the browser tab.
-4. **Offline and Air-Gapped**: The vault functions completely offline. You can export an encrypted JSON backup for git storage or local backup without exposing plaintext secrets.
-
----
-
-## Key Features
-
-- **1-Click Stack Launchpad**: Organize systems by categories: Commerce, Analytics, Automation, AI & LLM, Infrastructure, Marketing, and Inbound.
-- **Multi-Environment Subplatforms**: Expand any tile to reveal instant links to Production, Staging, Admin Consoles, and direct database endpoints.
-- **Multi-Tenant Presets**:
-  - `demo.json`: Pre-configured public sandbox featuring OpenCart, Adobe Commerce (Magento 2), UnoPim, Bagisto, Umami Analytics, and Medusa v2.
-  - `sharafdg.json`: Tailored GCC omnichannel preset featuring Akeneo Enterprise PIM, custom Laravel OMS (`dgoms.sharafdg.com`), multi-country storefronts, Algolia, and Grafana.
-  - `buildeon-fleet.json`: Internal operational fleet preset for VPS staging clusters, Dokploy, Postiz, and n8n.
-- **Brand Auto-Themer**: Enter any company domain (e.g. `uae.sharafdg.com` or `nike.com`) to extract brand colors and skin the entire cockpit dynamically. Presets can freeze their theme by setting `"allowThemeCustomizer": false`.
-- **Cloudflare Zero Trust Access Ready**: Deploy behind Cloudflare Access or Traefik IP allowlists for zero-trust perimeter defense.
+1. **Hardened PBKDF2 Key Derivation:** When you supply your master password, Commerce Dock derives an ephemeral 256-bit cryptographic key using `PBKDF2` with HMAC-SHA256 and **600,000 iterations** alongside a cryptographically random 16-byte salt (meeting OWASP ASVS Level 2 recommendations).
+2. **Non-Extractable CryptoKey:** Keys are generated with `extractable: false`, ensuring raw symmetric key bits cannot be exported from memory by browser extensions or third-party scripts.
+3. **Strict IV Uniqueness:** All credentials (usernames, tokens, passwords) are encrypted using AES-GCM with a fresh, non-repeating 12-byte (96-bit) Initialization Vector on every single encryption operation.
+4. **Zero Server Computation:** Commerce Dock is a static client application. There is no backend database, no login API, and zero telemetry tracking your secrets.
+5. **Inactivity Auto-Lock:** In-memory keys are automatically wiped after **5 minutes** of inactivity or when the tab stays hidden.
+6. **20-Second Clipboard Scrubbing:** 1-click credential copying automatically clears or scrubs the system clipboard after 20 seconds.
+7. **Server-Blind `.cdvault` Export / Import:** Export and restore encrypted AES-256-GCM payloads for offline backups without ever transmitting plaintext secrets.
 
 ---
 
-## Live Demo & Screenshots
+## Security & GDPR Compliance
 
-- **Public Instant Demo**: [demo.buildeon.solutions/commerce-dock](https://demo.buildeon.solutions/commerce-dock)
-- **Marketing & Product Overview**: [buildeon.solutions/products/commerce-dock](https://buildeon.solutions/products/commerce-dock/)
-- **Default Demo Vault Master Password**: `buildeon-demo`
+Commerce Dock is built under strict privacy and security principles:
+
+* **Zero Outbound Asset Requests (GDPR Article 25 & 32):** The application loads zero external fonts (Google Fonts), zero external CDN scripts (unpkg, jsdelivr), and zero external favicon resolvers. All assets are self-contained.
+* **SSRF Protection Engine:** Built-in URL validation engine (`CommerceDockSSRF`) blocks Server-Side Request Forgery attempts against cloud metadata endpoints (`169.254.169.254`), loopback addresses (`127.0.0.0/8`, `localhost`), and unauthorized private subnets.
+* **Non-Root Container Runtime:** Executes under unprivileged user `USER nginx` with restricted capabilities.
+* **Localhost Port Binding by Default:** `docker-compose.yml` binds strictly to `127.0.0.1:8089` to prevent Docker from bypassing host `ufw`/`iptables` firewall rules.
+* **Strict HTTP Security Headers:** Enforces `Content-Security-Policy: default-src 'self'`, `Referrer-Policy: no-referrer`, `X-Frame-Options: DENY`, and `X-Content-Type-Options: nosniff`.
+* **Full Documentation:** Review our complete [SECURITY.md](./SECURITY.md) and [PRIVACY.md](./PRIVACY.md).
+
+---
+
+## AI Agent & MCP Stack Context
+
+Commerce Dock includes built-in support for autonomous AI engineering and operations agents (OpenClaw, Hermes, Claude Code, Antigravity):
+
+* **1-Click MCP Topology Manifest Export:** Click **🤖 MCP Stack** to generate a sanitized architecture topology (`stack-context.json` or Markdown).
+* **Strict Security Guarantee:** The AI topology manifest strictly excludes all vault secrets, passwords, tokens, and hints, enabling safe context sharing with LLMs.
+* **Commerce Pulse Adapters:** Modular health adapters for Medusa (`/health`), Meilisearch (`/health`), Umami (`/api/heartbeat`), and generic HTTP/HTTPS endpoints with SSRF guards.
+
+---
+
+## Multi-Tenant Presets
+
+- `demo.json`: Pre-configured public sandbox featuring OpenCart, Adobe Commerce (Magento 2), UnoPim, Bagisto, Umami Analytics, and Medusa v2.
+- `sharafdg.json`: Tailored GCC omnichannel preset featuring Akeneo Enterprise PIM, custom Laravel OMS (`dgoms.sharafdg.com`), multi-country storefronts, Algolia, and Grafana.
+- `buildeon-fleet.json`: Internal operational fleet preset for VPS staging clusters, Dokploy Swarm, Postiz, and n8n.
+
+---
+
+## 1-Click Deployment Templates
+
+Ready-to-use production orchestration templates are available in [`deployments/`](./deployments/):
+
+* **[Dokploy](./deployments/dokploy/docker-compose.yml):** Automated Traefik ingress and Let's Encrypt TLS.
+* **[Coolify](./deployments/coolify/docker-compose.yml):** Self-hosted PaaS with automated reverse proxying.
+* **[Cloudflare Tunnel](./deployments/cloudflare-tunnel/docker-compose.yml):** Air-gapped ingress with zero open inbound WAN ports.
 
 ---
 
 ## Quickstart with Docker
 
-Run Commerce Dock locally in 5 seconds using Docker:
+Run Commerce Dock locally in 5 seconds:
 
 ```bash
 # Clone the repository inside ~/projects/
@@ -81,94 +107,31 @@ Access the dashboard at `http://localhost:8089`.
 
 ---
 
-## Static Hosting & Cloudflare Pages
+## Development & Test Suite
 
-Because Commerce Dock has **zero backend computation requirements**, you can host it for free on any static host or CDN:
+Commerce Dock includes a comprehensive automated test and compliance suite:
 
-### Deploy to Cloudflare Pages
-1. Push your repository to GitHub or GitLab.
-2. Connect your repo in the Cloudflare Dashboard under **Workers & Pages**.
-3. Set build configuration:
-   - **Framework Preset**: None (Static HTML)
-   - **Build Output Directory**: `/` (or root)
-4. Deploy. Your dock will be live on Cloudflare's edge network globally.
+```bash
+# Install development dependencies
+npm install
 
-### Deploying Behind Cloudflare Zero Trust (Recommended Enterprise Architecture)
-For maximum defense-in-depth:
-1. Place your Commerce Dock domain behind **Cloudflare Zero Trust Access**.
-2. Configure corporate Identity Provider authentication (Google Workspace, Microsoft Entra ID, or Email One-Time Pin).
-3. The outer perimeter is guarded by corporate SSO with zero public port exposure; the inner operational credentials remain guarded by Commerce Dock's local client-side AES-256-GCM vault.
+# Run unit test suite (Cryptographic Vault, SSRF Engine, Pulse Telemetry)
+npm test
 
----
+# Run TypeScript type verification
+npm run typecheck
 
-## Configuration & Custom Presets
+# Run GDPR compliance and security linting
+npm run lint
 
-Create your custom stack preset in `src/presets/my-company.json`:
-
-```json
-{
-  "dockId": "my-enterprise-stack",
-  "title": "Acme Corp Operations Dock",
-  "subtitle": "Global Omnichannel Commerce & Cloud Infrastructure",
-  "brand": {
-    "name": "Acme Operations",
-    "theme": "slate",
-    "primaryColor": "#38bdf8",
-    "secondaryColor": "#818cf8",
-    "bgColor": "#0f172a",
-    "allowThemeCustomizer": true
-  },
-  "services": [
-    {
-      "id": "acme-storefront",
-      "name": "Acme Storefront",
-      "category": "commerce",
-      "badge": "Shopify Plus / Headless",
-      "url": "https://store.acme.com",
-      "status": "online",
-      "description": "Production commerce storefront and catalog.",
-      "icon": "🛍️",
-      "credentials": {
-        "username": "admin@acme.com",
-        "hint": "Master password unlocks administrative access"
-      },
-      "subplatforms": [
-        {
-          "name": "Shopify Admin Console",
-          "url": "https://admin.shopify.com/store/acme-store",
-          "icon": "🔑",
-          "description": "Inventory, orders, and promotions."
-        },
-        {
-          "name": "Staging Storefront",
-          "url": "https://staging.store.acme.com",
-          "icon": "🧪",
-          "description": "Pre-release build validation."
-        }
-      ]
-    }
-  ]
-}
+# Verify build assets
+npm run build
 ```
-
-Load your preset via query parameter:
-`http://localhost:8089/?preset=my-company`
-
----
-
-## Technology Stack
-
-- **Cryptographic Core**: Native Web Crypto API (`window.crypto.subtle`)
-- **Key Derivation**: PBKDF2 (HMAC-SHA256, 100,000 iterations)
-- **Encryption**: AES-GCM (256-bit, unique 96-bit IV)
-- **Frontend**: Lightweight vanilla ES6 JavaScript (Zero npm runtime dependencies)
-- **Styling**: Modern CSS3 with CSS variables and responsive glassmorphism
-- **Container**: Minimal Alpine Nginx container (< 25MB)
 
 ---
 
 ## Contributing & License
 
-Contributions, presets for popular platforms, and security enhancements are warmly welcomed. Please open an issue or submit a pull request.
+Contributions, presets for popular platforms, and security enhancements are warmly welcomed. Please review [SECURITY.md](./SECURITY.md) for vulnerability disclosure guidelines.
 
-Distributed under the **MIT License**. Crafted with precision by [Buildeon Solutions](https://buildeon.solutions).
+Distributed under the **Apache-2.0 License**. Crafted with precision by [Buildeon Solutions](https://buildeon.solutions).

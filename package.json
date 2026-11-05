@@ -1,0 +1,39 @@
+{
+  "name": "commerce-dock",
+  "version": "1.1.0",
+  "description": "Sovereign operations hub and zero-knowledge client-side encrypted stack launcher for composable commerce, AI, and cloud infrastructure.",
+  "main": "src/js/app.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . && node scripts/lint.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Buildeon/commerce-dock.git"
+  },
+  "keywords": [
+    "commerce-dock",
+    "composable-commerce",
+    "zero-knowledge",
+    "aes-256-gcm",
+    "pbkdf2",
+    "sovereign-cloud",
+    "operations-launcher",
+    "owasp-asvs",
+    "gdpr"
+  ],
+  "author": "Buildeon Solutions <hey@buildeon.solutions>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Buildeon/commerce-dock/issues"
+  },
+  "homepage": "https://github.com/Buildeon/commerce-dock#readme",
+  "devDependencies": {
+    "@types/node": "^22.13.1",
+    "eslint": "^9.20.0",
+    "typescript": "^5.7.3"
+  }
+}

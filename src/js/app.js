@@ -2,6 +2,10 @@
  * Commerce Dock — Main Orchestrator & UI Controller
  */
 
+import CommerceDockVault from './vault.js';
+import CommerceDockTheme from './theme.js';
+import { CommerceDockPulse } from './pulse.js';
+
 (() => {
   const vault = new CommerceDockVault();
   const theme = new CommerceDockTheme();
@@ -9,6 +13,7 @@
   let activePresetData = null;
   let currentFilter = 'all';
   let searchQuery = '';
+  let activeIoMode = 'vault'; // 'vault' or 'mcp'
 
   // DOM Elements
   const servicesContainer = document.getElementById('services-grid');
@@ -17,6 +22,7 @@
   const vaultStatusPill = document.getElementById('vault-status-pill');
   const unlockVaultBtn = document.getElementById('unlock-vault-btn');
   const exportVaultBtn = document.getElementById('export-vault-btn');
+  const exportMcpBtn = document.getElementById('export-mcp-btn');
   const wipeVaultBtn = document.getElementById('wipe-vault-btn');
   const themeCustomizerSection = document.getElementById('theme-customizer');
   const urlThemeInput = document.getElementById('url-theme-input');
@@ -33,10 +39,34 @@
   const ioModal = document.getElementById('io-modal');
   const ioTextarea = document.getElementById('io-textarea');
   const ioModalTitle = document.getElementById('io-modal-title');
+  const ioModalDesc = document.getElementById('io-modal-desc');
   const ioSubmitBtn = document.getElementById('io-submit-btn');
   const closeIoModalBtn = document.getElementById('close-io-modal');
+  const closeIoModalActionBtn = document.getElementById('close-io-modal-btn');
+  const downloadCdvaultBtn = document.getElementById('download-cdvault-btn');
+  const importCdvaultTrigger = document.getElementById('import-cdvault-trigger');
+  const cdvaultFileInput = document.getElementById('cdvault-file-input');
+  const copyIoBtn = document.getElementById('copy-io-btn');
 
   const toastEl = document.getElementById('toast');
+
+  // --- Insecure Ingress Guard Banner ---
+  const insecureBanner = document.getElementById('insecure-http-banner');
+  if (insecureBanner && window.location.protocol === 'http:' && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+    insecureBanner.style.display = 'flex';
+  }
+  const dismissBanner = document.getElementById('dismiss-http-warning');
+  if (dismissBanner && insecureBanner) {
+    dismissBanner.addEventListener('click', () => {
+      insecureBanner.style.display = 'none';
+    });
+  }
+
+  // Auto-lock listener
+  window.addEventListener('commerce-dock:vault-locked', (_e) => {
+    showToast('Vault auto-locked due to inactivity (5 min).');
+    renderServices();
+  });
 
   // --- Helpers ---
   function showToast(message, duration = 3000) {
@@ -384,14 +414,33 @@
   }
 
   function attachCardListeners() {
-    // Copy buttons
+    // Copy buttons with 20-second automatic clipboard scrubbing
     document.querySelectorAll('.copy-btn').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const text = btn.getAttribute('data-copy');
         if (!text || text === '—') return;
         navigator.clipboard.writeText(text).then(() => {
-          showToast(`Copied to clipboard: ${text}`);
+          showToast(`Copied to clipboard. Clipboard will be scrubbed in 20s.`);
+          setTimeout(() => {
+            if (navigator.clipboard && navigator.clipboard.readText) {
+              navigator.clipboard.readText().then(current => {
+                if (current === text) {
+                  navigator.clipboard.writeText('').then(() => {
+                    showToast('Clipboard scrubbed.');
+                  }).catch(() => {});
+                }
+              }).catch(() => {
+                navigator.clipboard.writeText('').then(() => {
+                  showToast('Clipboard scrubbed.');
+                }).catch(() => {});
+              });
+            } else {
+              navigator.clipboard.writeText('').then(() => {
+                showToast('Clipboard scrubbed.');
+              }).catch(() => {});
+            }
+          }, 20000);
         }).catch(() => {
           showToast('Failed to copy to clipboard');
         });
@@ -522,19 +571,125 @@
     });
   }
 
-  // --- Export / Import Vault ---
+  // --- Export / Import Vault & AI MCP Manifest ---
   if (exportVaultBtn) {
     exportVaultBtn.addEventListener('click', () => {
+      activeIoMode = 'vault';
       const json = vault.exportEncryptedVault();
-      ioModalTitle.textContent = 'Encrypted Vault Backup (Zero-Knowledge)';
-      ioTextarea.value = json;
-      ioSubmitBtn.style.display = 'none';
-      ioModal.classList.add('open');
+      if (ioModalTitle) ioModalTitle.textContent = 'Server-Blind Encrypted Vault Backup (.cdvault)';
+      if (ioModalDesc) ioModalDesc.textContent = 'Zero-Knowledge AES-256-GCM envelope (600,000 PBKDF2 iterations). Keys and plaintext secrets are never transmitted. Safe to back up to local disk.';
+      if (ioTextarea) {
+        ioTextarea.value = json;
+        ioTextarea.readOnly = false;
+      }
+      if (downloadCdvaultBtn) {
+        downloadCdvaultBtn.style.display = 'inline-block';
+        downloadCdvaultBtn.textContent = '⬇️ Download .cdvault';
+      }
+      if (importCdvaultTrigger) importCdvaultTrigger.style.display = 'inline-block';
+      if (ioSubmitBtn) ioSubmitBtn.style.display = 'inline-block';
+      if (ioModal) ioModal.classList.add('open');
+    });
+  }
+
+  if (exportMcpBtn) {
+    exportMcpBtn.addEventListener('click', () => {
+      if (!activePresetData) return;
+      activeIoMode = 'mcp';
+      const manifest = CommerceDockPulse.exportStackContext(activePresetData, 'json');
+      if (ioModalTitle) ioModalTitle.textContent = 'Sanitized AI / MCP Stack Topology Manifest';
+      if (ioModalDesc) ioModalDesc.textContent = 'Topology manifest for autonomous operations agents (OpenClaw, Hermes, Claude Code, Antigravity). Strictly sanitized: zero credentials, passwords, or tokens.';
+      if (ioTextarea) {
+        ioTextarea.value = manifest;
+        ioTextarea.readOnly = true;
+      }
+      if (downloadCdvaultBtn) {
+        downloadCdvaultBtn.style.display = 'inline-block';
+        downloadCdvaultBtn.textContent = '⬇️ Download stack-context.json';
+      }
+      if (importCdvaultTrigger) importCdvaultTrigger.style.display = 'none';
+      if (ioSubmitBtn) ioSubmitBtn.style.display = 'none';
+      if (ioModal) ioModal.classList.add('open');
+    });
+  }
+
+  if (downloadCdvaultBtn) {
+    downloadCdvaultBtn.addEventListener('click', () => {
+      const content = ioTextarea ? ioTextarea.value : '';
+      if (!content) return;
+      const isMcp = activeIoMode === 'mcp';
+      const filename = isMcp ? 'stack-context.json' : `commerce-dock-vault-${Date.now()}.cdvault`;
+      const blob = new Blob([content], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Downloaded: ${filename}`);
+    });
+  }
+
+  if (copyIoBtn && ioTextarea) {
+    copyIoBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(ioTextarea.value).then(() => {
+        showToast('Payload copied to clipboard');
+      }).catch(() => {
+        showToast('Failed to copy to clipboard');
+      });
+    });
+  }
+
+  if (importCdvaultTrigger && cdvaultFileInput) {
+    importCdvaultTrigger.addEventListener('click', () => {
+      cdvaultFileInput.click();
+    });
+
+    cdvaultFileInput.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (evt) => {
+        try {
+          const content = evt.target?.result;
+          if (typeof content === 'string') {
+            vault.importEncryptedVault(content);
+            showToast('Encrypted vault imported successfully. Unlock with your master password.');
+            if (ioModal) ioModal.classList.remove('open');
+          }
+        } catch (err) {
+          showToast(`Import failed: ${err.message}`);
+        }
+      };
+      reader.readAsText(file);
+      cdvaultFileInput.value = '';
+    });
+  }
+
+  if (ioSubmitBtn && ioTextarea) {
+    ioSubmitBtn.addEventListener('click', () => {
+      try {
+        vault.importEncryptedVault(ioTextarea.value);
+        showToast('Encrypted vault imported successfully. Unlock with your master password.');
+        if (ioModal) ioModal.classList.remove('open');
+      } catch (err) {
+        showToast(`Import error: ${err.message}`);
+      }
     });
   }
 
   if (closeIoModalBtn) {
-    closeIoModalBtn.addEventListener('click', () => ioModal.classList.remove('open'));
+    closeIoModalBtn.addEventListener('click', () => {
+      if (ioModal) ioModal.classList.remove('open');
+    });
+  }
+
+  if (closeIoModalActionBtn) {
+    closeIoModalActionBtn.addEventListener('click', () => {
+      if (ioModal) ioModal.classList.remove('open');
+    });
   }
 
   if (wipeVaultBtn) {
