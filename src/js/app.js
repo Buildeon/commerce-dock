@@ -30,7 +30,6 @@ import { getServiceIcon } from './icons.js';
   const themeCustomizerSection = document.getElementById('theme-customizer');
   const urlThemeInput = document.getElementById('url-theme-input');
   const applyUrlThemeBtn = document.getElementById('apply-url-theme-btn');
-  const presetSelector = document.getElementById('preset-selector');
   const dockClientLogo = document.getElementById('dock-client-logo');
   const coBrandAnchor = document.getElementById('co-brand-anchor');
 
@@ -123,16 +122,6 @@ import { getServiceIcon } from './icons.js';
   async function loadPreset(presetName) {
     const host = window.location.hostname.toLowerCase();
     const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
-
-    // On dedicated subdomains, completely remove preset selector
-    if (presetSelector) {
-      if (isDedicatedHost) {
-        presetSelector.style.display = 'none';
-      } else {
-        presetSelector.style.display = 'inline-block';
-        presetSelector.value = presetName;
-      }
-    }
 
     try {
       const response = await fetch(`/src/presets/${presetName}.json`);
@@ -300,11 +289,6 @@ import { getServiceIcon } from './icons.js';
           localStorage.setItem('dock_invite_' + preset.dockId, required);
           showToast(`Access granted: Welcome to ${brandName} Operations`);
           if (headerActions) headerActions.style.display = 'flex';
-          const host = window.location.hostname.toLowerCase();
-          const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
-          if (presetSelector) {
-            presetSelector.style.display = isDedicatedHost ? 'none' : 'inline-block';
-          }
           if (controlsBar) controlsBar.style.display = 'flex';
           renderServices();
         } else {
@@ -350,12 +334,6 @@ import { getServiceIcon } from './icons.js';
 
     const headerActions = document.querySelector('.header-actions');
     if (headerActions) headerActions.style.display = 'flex';
-
-    const host = window.location.hostname.toLowerCase();
-    const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
-    if (presetSelector) {
-      presetSelector.style.display = isDedicatedHost ? 'none' : 'inline-block';
-    }
 
     const controlsBar = document.querySelector('.controls-bar');
     if (controlsBar) controlsBar.style.display = 'flex';
@@ -1105,24 +1083,6 @@ import { getServiceIcon } from './icons.js';
       }
     });
   });
-
-  // Preset Selector
-  if (presetSelector) {
-    const host = window.location.hostname.toLowerCase();
-    const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
-    if (isDedicatedHost) {
-      presetSelector.style.display = 'none';
-    } else {
-      presetSelector.value = resolvePresetName();
-      presetSelector.addEventListener('change', (e) => {
-        const chosen = e.target.value;
-        const url = new URL(window.location);
-        url.searchParams.set('preset', chosen);
-        window.history.pushState({}, '', url);
-        loadPreset(chosen);
-      });
-    }
-  }
 
   // Vault state subscriber
   vault.onStateChange((unlocked) => {
