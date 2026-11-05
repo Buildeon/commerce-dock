@@ -1,10 +1,11 @@
 {
   "dockId": "public-demo",
-  "title": "Commerce Dock — Sovereign Operations Launcher & Stack Hub",
+  "title": "Commerce Dock: Sovereign Operations Launcher & Stack Hub",
   "subtitle": "Interactive Public Demo & Composable Commerce Sandbox",
   "brand": {
     "name": "Commerce Dock",
     "theme": "buildeon",
+    "fontStack": "modern-sans",
     "allowThemeCustomizer": true
   },
   "services": [
@@ -12,11 +13,12 @@
       "id": "demo-opencart",
       "name": "OpenCart",
       "category": "commerce",
+      "environment": "production",
       "badge": "Active Demo",
       "url": "https://demo.opencart.com/",
       "status": "online",
       "description": "Lightweight open-source e-commerce platform with pre-configured administrative sandbox and order workflow.",
-      "icon": "🛒",
+      "icon": "opencart",
       "credentials": {
         "username": "demo",
         "hint": "Master Password Unlocks: demo / demo"
@@ -40,11 +42,12 @@
       "id": "demo-adobe-commerce",
       "name": "Adobe Commerce (Magento 2)",
       "category": "commerce",
+      "environment": "staging",
       "badge": "Enterprise B2B Demo",
       "url": "https://magento2-b2b.magebit.com/",
       "status": "online",
       "description": "Enterprise composable commerce platform with multi-warehouse inventory, B2B quotes, and customer groups.",
-      "icon": "🏬",
+      "icon": "adobe-commerce",
       "credentials": {
         "username": "magebit",
         "hint": "Master Password Unlocks: magebit / Demo123"
@@ -68,11 +71,12 @@
       "id": "demo-unopim",
       "name": "UnoPim PIM",
       "category": "commerce",
+      "environment": "staging",
       "badge": "Open-Source PIM",
       "url": "https://demo.unopim.com/",
       "status": "online",
       "description": "Next-generation Product Information Management built on modern architecture for multi-channel product syndication.",
-      "icon": "🏷️",
+      "icon": "unopim",
       "subplatforms": [
         {
           "name": "UnoPim Interactive Sandbox",
@@ -92,11 +96,12 @@
       "id": "demo-bagisto",
       "name": "Bagisto B2C & B2B",
       "category": "commerce",
+      "environment": "development",
       "badge": "Laravel Commerce",
       "url": "https://demo.bagisto.com/",
       "status": "online",
       "description": "Modular Laravel-based headless e-commerce platform with multi-tenant marketplace and multi-currency engine.",
-      "icon": "🛍️",
+      "icon": "bagisto",
       "subplatforms": [
         {
           "name": "Bagisto Storefront Demo",
@@ -116,11 +121,12 @@
       "id": "demo-umami",
       "name": "Umami Analytics",
       "category": "analytics",
+      "environment": "production",
       "badge": "Privacy Telemetry",
       "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
       "status": "online",
       "description": "Zero-cookie, GDPR-compliant privacy analytics telemetry tracking live visitors, events, and referrer graphs.",
-      "icon": "📊",
+      "icon": "umami",
       "subplatforms": [
         {
           "name": "Umami Live Demo Dashboard",
@@ -134,11 +140,12 @@
       "id": "demo-medusa",
       "name": "Medusa v2 Composable",
       "category": "commerce",
+      "environment": "development",
       "badge": "Headless Engine",
       "url": "https://medusajs.com/",
       "status": "online",
       "description": "Open-source composable commerce engine with modern Node.js architecture, workflows, and multi-region tax/pricing.",
-      "icon": "🐙",
+      "icon": "medusa",
       "subplatforms": [
         {
           "name": "Medusa Documentation & Architecture",

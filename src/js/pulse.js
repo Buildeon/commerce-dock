@@ -1,5 +1,5 @@
 /**
- * Commerce Dock — Commerce Pulse & AI Agent Stack Context Engine
+ * Commerce Dock: Commerce Pulse & AI Agent Stack Context Engine
  * 
  * Capabilities:
  * 1. AI Agent / MCP Topology Manifest Exporter:

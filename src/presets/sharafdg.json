@@ -8,6 +8,7 @@
     "primaryColor": "#ffcc00",
     "secondaryColor": "#002f6c",
     "bgColor": "#0b1329",
+    "fontStack": "geometric",
     "allowThemeCustomizer": false
   },
   "accessControl": {
@@ -21,6 +22,7 @@
       "id": "sdg-oms",
       "name": "Order Management System (OMS)",
       "category": "commerce",
+      "environment": "production",
       "badge": "Laravel Engine",
       "url": "https://dgoms.sharafdg.com",
       "status": "online",
@@ -45,11 +47,12 @@
       "id": "sdg-pim",
       "name": "Akeneo Enterprise PIM",
       "category": "commerce",
+      "environment": "production",
       "badge": "Cloud Catalog",
       "url": "https://sharafdg.cloud.akeneo.com",
       "status": "online",
-      "description": "Master product catalog, category taxomony, technical spec sheets, and digital asset management for GCC catalogs.",
-      "icon": "🏷️",
+      "description": "Master product catalog, category taxonomy, technical spec sheets, and digital asset management for GCC catalogs.",
+      "icon": "akeneo",
       "subplatforms": [
         {
           "name": "Akeneo PIM (Production)",
@@ -69,11 +72,12 @@
       "id": "sdg-storefronts",
       "name": "Regional Storefronts",
       "category": "commerce",
+      "environment": "production",
       "badge": "GCC Flagship",
       "url": "https://uae.sharafdg.com",
       "status": "online",
       "description": "High-traffic consumer retail storefronts powering electronics and appliance commerce across the GCC.",
-      "icon": "🛍️",
+      "icon": "adobe-commerce",
       "subplatforms": [
         {
           "name": "UAE Storefront",
@@ -111,6 +115,7 @@
       "id": "sdg-woocommerce-staging",
       "name": "WooCommerce Engine (Staging)",
       "category": "commerce",
+      "environment": "staging",
       "badge": "Staging Commerce",
       "url": "https://uae.sdgstage.com",
       "status": "online",
@@ -135,11 +140,12 @@
       "id": "sdg-search-algolia",
       "name": "Algolia AI Search & Discovery",
       "category": "analytics",
+      "environment": "production",
       "badge": "Search Index",
       "url": "https://dashboard.algolia.com",
       "status": "online",
       "description": "Real-time SKU facet search, sub-10ms query latency, typo tolerance, and personalized query suggestions.",
-      "icon": "🔍",
+      "icon": "algolia",
       "subplatforms": [
         {
           "name": "Algolia Search (Production App)",
@@ -156,9 +162,48 @@
       ]
     },
     {
+      "id": "sdg-omniroute",
+      "name": "OmniRoute GCC Smart Dispatcher",
+      "category": "automation",
+      "environment": "staging",
+      "badge": "Logistics AI",
+      "url": "https://sdgstage.com/dispatch",
+      "status": "online",
+      "description": "Intelligent last-mile routing engine and fleet dispatch optimizer for UAE and KSA courier fleets.",
+      "icon": "omniroute",
+      "subplatforms": [
+        {
+          "name": "OmniRoute Fleet Dispatch Console",
+          "url": "https://sdgstage.com/dispatch",
+          "icon": "🚚",
+          "description": "Route mapping, courier load balancing, and SLA tracking."
+        }
+      ]
+    },
+    {
+      "id": "sdg-medusa-dev",
+      "name": "Medusa v2 Headless Spike",
+      "category": "commerce",
+      "environment": "development",
+      "badge": "Node.js PoC",
+      "url": "https://dev.sharafdg.internal:9000",
+      "status": "online",
+      "description": "Evaluation microservices architecture for next-generation composable checkout and custom promotion engine.",
+      "icon": "medusa",
+      "subplatforms": [
+        {
+          "name": "Medusa Dev API & Workflows",
+          "url": "https://dev.sharafdg.internal:9000/health",
+          "icon": "⚡",
+          "description": "Automated cart and order workflow API."
+        }
+      ]
+    },
+    {
       "id": "sdg-jobs-scheduler",
       "name": "Async Job Scheduler",
       "category": "infra",
+      "environment": "staging",
       "badge": "Laravel Worker",
       "url": "https://jobs.sdgstage.com",
       "status": "online",
@@ -177,6 +222,7 @@
       "id": "sdg-cloud-azure",
       "name": "Microsoft Azure Cloud",
       "category": "infra",
+      "environment": "production",
       "badge": "Enterprise Cloud",
       "url": "https://portal.azure.com",
       "status": "online",
@@ -201,11 +247,12 @@
       "id": "sdg-observability-grafana",
       "name": "Grafana Observability",
       "category": "infra",
+      "environment": "staging",
       "badge": "Metrics & Alerts",
       "url": "https://grafana.sdgstage.com",
       "status": "online",
       "description": "Unified infrastructure telemetry monitoring server CPU/RAM, MySQL slow queries, Nginx latencies, and OMS job throughput.",
-      "icon": "📈",
+      "icon": "grafana",
       "subplatforms": [
         {
           "name": "Staging Telemetry Dashboards",

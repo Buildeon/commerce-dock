@@ -1,5 +1,5 @@
 /**
- * Commerce Dock — SSRF Protection & URL Security Engine
+ * Commerce Dock: SSRF Protection & URL Security Engine
  * 
  * Protects against Server-Side Request Forgery (SSRF) and Client-Side Blind Probing
  * targeting:

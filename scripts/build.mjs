@@ -14,7 +14,8 @@ const requiredFiles = [
   'src/css/style.css',
   'src/js/vault.js',
   'src/js/app.js',
-  'src/js/theme.js'
+  'src/js/theme.js',
+  'src/js/icons.js'
 ];
 
 for (const rel of requiredFiles) {

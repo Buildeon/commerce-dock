@@ -1,10 +1,11 @@
 /**
- * Commerce Dock — Main Orchestrator & UI Controller
+ * Commerce Dock: Main Orchestrator & UI Controller
  */
 
 import CommerceDockVault from './vault.js';
 import CommerceDockTheme from './theme.js';
 import { CommerceDockPulse } from './pulse.js';
+import { getServiceIcon } from './icons.js';
 
 (() => {
   const vault = new CommerceDockVault();
@@ -12,6 +13,7 @@ import { CommerceDockPulse } from './pulse.js';
 
   let activePresetData = null;
   let currentFilter = 'all';
+  let currentEnvFilter = 'all';
   let searchQuery = '';
   let activeIoMode = 'vault'; // 'vault' or 'mcp'
 
@@ -19,6 +21,7 @@ import { CommerceDockPulse } from './pulse.js';
   const servicesContainer = document.getElementById('services-grid');
   const searchInput = document.getElementById('search-input');
   const categoryTabs = document.getElementById('category-tabs');
+  const envPillsContainer = document.getElementById('env-pills');
   const vaultStatusPill = document.getElementById('vault-status-pill');
   const unlockVaultBtn = document.getElementById('unlock-vault-btn');
   const exportVaultBtn = document.getElementById('export-vault-btn');
@@ -28,6 +31,8 @@ import { CommerceDockPulse } from './pulse.js';
   const urlThemeInput = document.getElementById('url-theme-input');
   const applyUrlThemeBtn = document.getElementById('apply-url-theme-btn');
   const presetSelector = document.getElementById('preset-selector');
+  const dockClientLogo = document.getElementById('dock-client-logo');
+  const coBrandAnchor = document.getElementById('co-brand-anchor');
 
   // Modal Elements
   const vaultModal = document.getElementById('vault-modal');
@@ -68,6 +73,7 @@ import { CommerceDockPulse } from './pulse.js';
   const cfgIcon = document.getElementById('cfg-icon');
   const cfgName = document.getElementById('cfg-name');
   const cfgCategory = document.getElementById('cfg-category');
+  const cfgEnvironment = document.getElementById('cfg-environment');
   const cfgBadge = document.getElementById('cfg-badge');
   const cfgUrl = document.getElementById('cfg-url');
   const cfgHealthUrl = document.getElementById('cfg-health-url');
@@ -166,10 +172,31 @@ import { CommerceDockPulse } from './pulse.js';
     const heroTitleEl = document.getElementById('hero-title');
     const heroDescEl = document.getElementById('hero-desc');
 
-    if (dockTitleEl) dockTitleEl.textContent = activePresetData.brand?.name || 'Commerce Dock';
+    const brandName = activePresetData.brand?.name || 'Commerce Dock';
+    if (dockTitleEl) dockTitleEl.textContent = brandName;
     if (dockSubtitleEl) dockSubtitleEl.textContent = activePresetData.subtitle || '';
     if (heroTitleEl) heroTitleEl.textContent = activePresetData.title || 'Operations Launcher';
     if (heroDescEl) heroDescEl.textContent = activePresetData.subtitle || 'Zero-Knowledge Composable Operations Matrix';
+
+    // Update Dual-Brand Header
+    if (dockClientLogo) {
+      if (activePresetData.brand?.logoSvg) {
+        dockClientLogo.innerHTML = activePresetData.brand.logoSvg;
+      } else if (brandName !== 'Commerce Dock') {
+        const initials = brandName.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+        dockClientLogo.textContent = initials || '⚓';
+      } else {
+        dockClientLogo.textContent = '⚓';
+      }
+    }
+
+    if (coBrandAnchor) {
+      if (brandName.toLowerCase().includes('commerce dock')) {
+        coBrandAnchor.innerHTML = '<span class="anchor-sym">⚓</span> <span class="anchor-text">Sovereign Composable Operations Engine</span>';
+      } else {
+        coBrandAnchor.innerHTML = '<span class="anchor-sym">⚓</span> <span class="anchor-text">Powered by <strong>Commerce Dock</strong></span>';
+      }
+    }
 
     // Apply Brand Theme
     if (activePresetData.brand) {
@@ -336,13 +363,16 @@ import { CommerceDockPulse } from './pulse.js';
     const services = activePresetData.services || [];
     const filtered = services.filter(service => {
       const matchesCategory = (currentFilter === 'all') || (service.category === currentFilter);
+      const serviceEnv = (service.environment || 'production').toLowerCase();
+      const matchesEnv = (currentEnvFilter === 'all') || (serviceEnv === currentEnvFilter.toLowerCase());
       const q = searchQuery.toLowerCase();
       const matchesSearch = !q || 
         service.name.toLowerCase().includes(q) ||
         (service.description && service.description.toLowerCase().includes(q)) ||
         (service.badge && service.badge.toLowerCase().includes(q)) ||
+        serviceEnv.includes(q) ||
         (service.subplatforms && service.subplatforms.some(sp => sp.name.toLowerCase().includes(q) || sp.url.toLowerCase().includes(q)));
-      return matchesCategory && matchesSearch;
+      return matchesCategory && matchesEnv && matchesSearch;
     });
 
     if (filtered.length === 0) {
@@ -365,7 +395,7 @@ import { CommerceDockPulse } from './pulse.js';
           creds = await vault.getAllSecretsForService(service.id);
         }
 
-        const usernameVal = creds?.username || service.credentials?.username || '—';
+        const usernameVal = creds?.username || service.credentials?.username || '-';
         const passwordVal = creds?.password || (isUnlocked ? '••••••••' : null);
         const hintText = service.credentials?.hint || 'Protected by Zero-Knowledge Master Password';
 
@@ -418,14 +448,21 @@ import { CommerceDockPulse } from './pulse.js';
         `;
       }
 
+      const serviceEnv = (service.environment || 'production').toLowerCase();
+      const envClass = `env-${serviceEnv}`;
+      const envLabel = serviceEnv.toUpperCase();
+
       return `
         <div class="service-card" data-service-id="${service.id}">
           <div>
             <div class="card-top">
               <div class="service-meta">
-                <div class="service-icon">${service.icon || '📦'}</div>
+                <div class="service-icon">${getServiceIcon(service, 28)}</div>
                 <div class="service-title">
-                  <h3>${escapeHtml(service.name)}</h3>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <h3>${escapeHtml(service.name)}</h3>
+                    <span class="service-env-pill ${envClass}">${escapeHtml(envLabel)}</span>
+                  </div>
                   <span class="badge-pill">${escapeHtml(service.category || 'Service')}</span>
                 </div>
               </div>
@@ -464,7 +501,7 @@ import { CommerceDockPulse } from './pulse.js';
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const text = btn.getAttribute('data-copy');
-        if (!text || text === '—') return;
+        if (!text || text === '-') return;
         navigator.clipboard.writeText(text).then(() => {
           showToast(`Copied to clipboard. Clipboard will be scrubbed in 20s.`);
           setTimeout(() => {
@@ -598,7 +635,18 @@ import { CommerceDockPulse } from './pulse.js';
     }
   }
 
-  // --- Category and Filter Listeners ---
+  // --- Category and Filter Listeners (Dual-Axis) ---
+  if (envPillsContainer) {
+    envPillsContainer.querySelectorAll('.env-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        envPillsContainer.querySelectorAll('.env-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentEnvFilter = btn.getAttribute('data-env') || 'all';
+        renderServices();
+      });
+    });
+  }
+
   if (categoryTabs) {
     categoryTabs.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -773,18 +821,18 @@ import { CommerceDockPulse } from './pulse.js';
 
   // --- Visual Stack Configurator Logic ---
   const SERVICE_TEMPLATES = [
-    { name: 'Adobe Commerce', icon: '🛒', category: 'commerce', badge: 'Magento 2', url: 'https://commerce.yourbrand.com/admin', healthCheckUrl: '/health_check.php', description: 'Enterprise B2B/B2C storefront and catalog cluster.' },
-    { name: 'Medusa v2', icon: '🔀', category: 'commerce', badge: 'Headless', url: 'http://localhost:9000/app', healthCheckUrl: 'http://localhost:9000/health', description: 'Composable commerce engine with custom workflows.' },
-    { name: 'Shopify Plus', icon: '🛍️', category: 'commerce', badge: 'Headless', url: 'https://admin.shopify.com', healthCheckUrl: '', description: 'Omnichannel cloud storefront with custom app extensions.' },
-    { name: 'Akeneo PIM', icon: '🏷️', category: 'commerce', badge: 'PIM', url: 'https://pim.yourbrand.com', healthCheckUrl: '/api/rest/v1', description: 'Master catalog enrichment and attribute taxonomy.' },
-    { name: 'Algolia Search', icon: '⚡', category: 'commerce', badge: 'Search', url: 'https://dashboard.algolia.com', healthCheckUrl: '', description: 'Fast product discovery, instant search, and AI merchandising.' },
-    { name: 'Stripe Payments', icon: '💳', category: 'commerce', badge: 'Fintech', url: 'https://dashboard.stripe.com', healthCheckUrl: '', description: 'Global payment gateway and billing reconciliation.' },
-    { name: 'Strapi CMS', icon: '📝', category: 'infra', badge: 'Headless CMS', url: 'http://localhost:1337/admin', healthCheckUrl: 'http://localhost:1337/_health', description: 'Headless content management system for storefronts.' },
-    { name: 'n8n Workflows', icon: '🔄', category: 'automation', badge: 'Workflows', url: 'http://localhost:5678', healthCheckUrl: 'http://localhost:5678/healthz', description: 'Self-hosted workflow automation for ERP and catalog sync.' },
-    { name: 'Supabase Postgres', icon: '🗄️', category: 'infra', badge: 'Postgres', url: 'http://localhost:54323', healthCheckUrl: 'http://localhost:54323/health', description: 'Managed database, row-level security, and auth services.' },
-    { name: 'PostHog Analytics', icon: '📊', category: 'analytics', badge: 'Analytics', url: 'https://eu.posthog.com', healthCheckUrl: '', description: 'Product analytics, session replays, and feature flags.' },
-    { name: 'OmniRoute AI', icon: '🤖', category: 'ai', badge: 'LLM Gateway', url: 'http://localhost:4000', healthCheckUrl: 'http://localhost:4000/health', description: 'Unified LLM routing for Claude CLI and OpenAI models.' },
-    { name: 'Custom Platform', icon: '🌐', category: 'commerce', badge: 'Custom', url: 'https://', healthCheckUrl: '', description: 'Custom operational endpoint or internal tool.' }
+    { name: 'Adobe Commerce', icon: 'adobe-commerce', category: 'commerce', environment: 'production', badge: 'Magento 2', url: 'https://commerce.yourbrand.com/admin', healthCheckUrl: '/health_check.php', description: 'Enterprise B2B/B2C storefront and catalog cluster.' },
+    { name: 'Medusa v2', icon: 'medusa', category: 'commerce', environment: 'development', badge: 'Headless', url: 'http://localhost:9000/app', healthCheckUrl: 'http://localhost:9000/health', description: 'Composable commerce engine with custom workflows.' },
+    { name: 'Shopify Plus', icon: 'shopify', category: 'commerce', environment: 'production', badge: 'Headless', url: 'https://admin.shopify.com', healthCheckUrl: '', description: 'Omnichannel cloud storefront with custom app extensions.' },
+    { name: 'Akeneo PIM', icon: 'akeneo', category: 'commerce', environment: 'production', badge: 'PIM', url: 'https://pim.yourbrand.com', healthCheckUrl: '/api/rest/v1', description: 'Master catalog enrichment and attribute taxonomy.' },
+    { name: 'Algolia Search', icon: 'algolia', category: 'analytics', environment: 'production', badge: 'Search', url: 'https://dashboard.algolia.com', healthCheckUrl: '', description: 'Fast product discovery, instant search, and AI merchandising.' },
+    { name: 'Stripe Payments', icon: 'stripe', category: 'commerce', environment: 'production', badge: 'Fintech', url: 'https://dashboard.stripe.com', healthCheckUrl: '', description: 'Global payment gateway and billing reconciliation.' },
+    { name: 'Strapi CMS', icon: 'strapi', category: 'infra', environment: 'staging', badge: 'Headless CMS', url: 'http://localhost:1337/admin', healthCheckUrl: 'http://localhost:1337/_health', description: 'Headless content management system for storefronts.' },
+    { name: 'n8n Workflows', icon: 'n8n', category: 'automation', environment: 'production', badge: 'Workflows', url: 'http://localhost:5678', healthCheckUrl: 'http://localhost:5678/healthz', description: 'Self-hosted workflow automation for ERP and catalog sync.' },
+    { name: 'Supabase Postgres', icon: 'supabase', category: 'infra', environment: 'staging', badge: 'Postgres', url: 'http://localhost:54323', healthCheckUrl: 'http://localhost:54323/health', description: 'Managed database, row-level security, and auth services.' },
+    { name: 'PostHog Analytics', icon: 'posthog', category: 'analytics', environment: 'production', badge: 'Analytics', url: 'https://eu.posthog.com', healthCheckUrl: '', description: 'Product analytics, session replays, and feature flags.' },
+    { name: 'OmniRoute AI', icon: 'omniroute', category: 'ai', environment: 'staging', badge: 'LLM Gateway', url: 'http://localhost:4000', healthCheckUrl: 'http://localhost:4000/health', description: 'Unified LLM routing for Claude CLI and OpenAI models.' },
+    { name: 'Custom Platform', icon: '🌐', category: 'commerce', environment: 'production', badge: 'Custom', url: 'https://', healthCheckUrl: '', description: 'Custom operational endpoint or internal tool.' }
   ];
 
   function persistCustomServices() {
@@ -821,6 +869,7 @@ import { CommerceDockPulse } from './pulse.js';
     if (cfgName) cfgName.value = tmpl.name;
     if (cfgIcon) cfgIcon.value = tmpl.icon;
     if (cfgCategory) cfgCategory.value = tmpl.category;
+    if (cfgEnvironment && tmpl.environment) cfgEnvironment.value = tmpl.environment;
     if (cfgBadge) cfgBadge.value = tmpl.badge || '';
     if (cfgUrl) cfgUrl.value = tmpl.url || '';
     if (cfgHealthUrl) cfgHealthUrl.value = tmpl.healthCheckUrl || '';
@@ -856,6 +905,7 @@ import { CommerceDockPulse } from './pulse.js';
       if (cfgName) cfgName.value = service.name;
       if (cfgIcon) cfgIcon.value = service.icon || '📦';
       if (cfgCategory) cfgCategory.value = service.category || 'commerce';
+      if (cfgEnvironment) cfgEnvironment.value = service.environment || 'production';
       if (cfgBadge) cfgBadge.value = service.badge || '';
       if (cfgUrl) cfgUrl.value = service.url || '';
       if (cfgHealthUrl) cfgHealthUrl.value = service.healthCheckUrl || '';
@@ -869,6 +919,7 @@ import { CommerceDockPulse } from './pulse.js';
       if (cfgServiceId) cfgServiceId.value = '';
       if (configServiceForm) configServiceForm.reset();
       if (cfgIcon) cfgIcon.value = '📦';
+      if (cfgEnvironment) cfgEnvironment.value = 'production';
     }
 
     if (cfgUsername) cfgUsername.value = '';
@@ -911,6 +962,7 @@ import { CommerceDockPulse } from './pulse.js';
       name: serviceName,
       icon: cfgIcon?.value?.trim() || '📦',
       category: cfgCategory?.value || 'commerce',
+      environment: cfgEnvironment?.value || 'production',
       badge: cfgBadge?.value?.trim() || '',
       url: cfgUrl?.value?.trim() || '',
       healthCheckUrl: cfgHealthUrl?.value?.trim() || '',

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Commerce Dock — Sovereign Operations Launcher & Stack Hub</title>
+  <title>Commerce Dock: Sovereign Operations Launcher & Stack Hub</title>
   <meta name="description" content="Open-source sovereign operations hub and zero-knowledge client-side encrypted stack launcher for composable commerce, AI, and cloud infrastructure.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>⚓</text></svg>">
   <link rel="stylesheet" href="src/css/style.css">
@@ -14,9 +14,15 @@
   <header class="dock-header">
     <div class="dock-header-inner">
       <div class="brand-section">
-        <div class="brand-logo">⚓</div>
+        <div id="dock-client-logo" class="brand-logo">⚓</div>
         <div class="brand-text">
-          <h1 id="dock-title">Commerce Dock</h1>
+          <div class="brand-title-row">
+            <h1 id="dock-title">Commerce Dock</h1>
+            <span class="co-brand-anchor" id="co-brand-anchor" title="Sovereign Composable Operations Engine">
+              <span class="anchor-sym">⚓</span>
+              <span class="anchor-text">Powered by <strong>Commerce Dock</strong></span>
+            </span>
+          </div>
           <p id="dock-subtitle">Sovereign Composable Operations</p>
         </div>
       </div>
@@ -95,22 +101,44 @@
       </div>
     </section>
 
-    <!-- Controls Bar: Search & Categories -->
+    <!-- Controls Bar: Search & Dual-Axis Grouping -->
     <section class="controls-bar">
       <div class="search-box">
         <span class="search-icon">🔍</span>
         <input type="text" id="search-input" placeholder="Search services, platforms, credentials, URLs...">
       </div>
 
-      <div class="category-tabs" id="category-tabs">
-        <button class="tab-btn active" data-category="all">All Stack</button>
-        <button class="tab-btn" data-category="commerce">Commerce</button>
-        <button class="tab-btn" data-category="analytics">Analytics</button>
-        <button class="tab-btn" data-category="automation">Automation</button>
-        <button class="tab-btn" data-category="ai">AI & LLM</button>
-        <button class="tab-btn" data-category="infra">Infra</button>
-        <button class="tab-btn" data-category="marketing">Marketing</button>
-        <button class="tab-btn" data-category="inbound">Inbound</button>
+      <div class="filter-controls-group">
+        <!-- Environment Switcher (Primary Axis) -->
+        <div class="environment-bar" id="environment-bar" aria-label="Environment Filter">
+          <span class="env-label">Environment:</span>
+          <div class="env-pills" id="env-pills">
+            <button class="env-pill active" data-env="all">
+              <span class="env-dot env-dot-all"></span> All Envs
+            </button>
+            <button class="env-pill" data-env="production">
+              <span class="env-dot env-dot-prod"></span> Production
+            </button>
+            <button class="env-pill" data-env="staging">
+              <span class="env-dot env-dot-stage"></span> Staging
+            </button>
+            <button class="env-pill" data-env="development">
+              <span class="env-dot env-dot-dev"></span> Development
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Tabs (Secondary Axis) -->
+        <div class="category-tabs" id="category-tabs" aria-label="Category Filter">
+          <button class="tab-btn active" data-category="all">All Stack</button>
+          <button class="tab-btn" data-category="commerce">Commerce</button>
+          <button class="tab-btn" data-category="analytics">Analytics</button>
+          <button class="tab-btn" data-category="automation">Automation</button>
+          <button class="tab-btn" data-category="ai">AI & LLM</button>
+          <button class="tab-btn" data-category="infra">Infra</button>
+          <button class="tab-btn" data-category="marketing">Marketing</button>
+          <button class="tab-btn" data-category="inbound">Inbound</button>
+        </div>
       </div>
     </section>
 
@@ -201,7 +229,7 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
           <div class="form-group">
             <label for="cfg-category">Category *</label>
             <select id="cfg-category" class="form-control" required>
@@ -215,8 +243,16 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="cfg-environment">Environment *</label>
+            <select id="cfg-environment" class="form-control" required>
+              <option value="production">🟢 Production</option>
+              <option value="staging">🟡 Staging</option>
+              <option value="development">🔵 Development</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="cfg-badge">Status Badge (Optional)</label>
-            <input type="text" id="cfg-badge" class="form-control" placeholder="e.g. Production / Staging / v2.4" />
+            <input type="text" id="cfg-badge" class="form-control" placeholder="e.g. Active / v2.4" />
           </div>
         </div>
 
@@ -283,7 +319,7 @@
   <footer class="dock-footer">
     <div class="container">
       <p>
-        <strong>Commerce Dock</strong> — Open Source Sovereign Operations Launcher & Stack Hub.
+        <strong>Commerce Dock</strong>: Open Source Sovereign Operations Launcher & Stack Hub.
         Crafted by <a href="https://buildeon.solutions" target="_blank" rel="noopener noreferrer">Buildeon Solutions</a>.
         Licensed under Apache-2.0. Open Source on <a href="https://github.com/Buildeon/commerce-dock" target="_blank" rel="noopener noreferrer">GitHub</a>.
       </p>
@@ -292,6 +328,7 @@
 
   <!-- Scripts -->
   <script type="module" src="src/js/vault.js"></script>
+  <script type="module" src="src/js/icons.js"></script>
   <script type="module" src="src/js/theme.js"></script>
   <script type="module" src="src/js/ssrf-validator.js"></script>
   <script type="module" src="src/js/pulse.js"></script>

@@ -1,5 +1,5 @@
 /**
- * Commerce Dock — Zero-Knowledge Client-Side Vault Engine
+ * Commerce Dock: Zero-Knowledge Client-Side Vault Engine
  * 
  * Cryptographic Specifications (OWASP ASVS Level 2):
  * - Key Derivation: PBKDF2 (HMAC-SHA256, 600,000 iterations per OWASP recommendations)
