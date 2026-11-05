@@ -173,6 +173,9 @@ class CommerceDockTheme {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = CommerceDockTheme;
-} else {
+}
+if (typeof window !== 'undefined') {
   window.CommerceDockTheme = CommerceDockTheme;
 }
+
+export default CommerceDockTheme;
