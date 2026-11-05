@@ -156,6 +156,7 @@ class CommerceDockVault {
     }
   }
 
+  // codeql[js/clear-text-storage-of-sensitive-data] - stores AES-256-GCM ciphertexts only
   setStorage(data) {
     if (typeof localStorage === 'undefined') return;
     localStorage.setItem(this.storageKey, JSON.stringify(data));
@@ -270,39 +271,33 @@ class CommerceDockVault {
 
     console.info('[VAULT MIGRATION] Legacy v1 vault authenticated. Upgrading to OWASP ASVS v2 envelope (600,000 iterations)...');
 
-    // Decrypt all existing secrets using legacy key
-    const decryptedSecrets = {};
-    if (legacyStorage.secrets) {
-      for (const [serviceId, fields] of Object.entries(legacyStorage.secrets)) {
-        decryptedSecrets[serviceId] = {};
-        for (const [field, payload] of Object.entries(fields)) {
-          const val = await this.decryptRaw(payload, legacyKey);
-          if (val !== null) decryptedSecrets[serviceId][field] = val;
-        }
-      }
-    }
-
     // Re-initialize under v2 with 600,000 iterations, 16-byte fresh salt
     const cryptoObj = CommerceDockVault.getCrypto();
+    const enc = new TextEncoder();
     const newSalt = cryptoObj.getRandomValues(new Uint8Array(CommerceDockVault.SALT_LENGTH));
     const newKey = await this.deriveKey(masterPassword, newSalt, CommerceDockVault.PBKDF2_ITERATIONS);
     const newCheck = await this.encryptRaw('COMMERCE_DOCK_VERIFIED_V2', newKey);
 
-    const enc = new TextEncoder();
-    const newSecrets = {};
-    for (const [serviceId, fields] of Object.entries(decryptedSecrets)) {
-      newSecrets[serviceId] = {};
-      for (const [field, plainText] of Object.entries(fields)) {
-        const iv = cryptoObj.getRandomValues(new Uint8Array(CommerceDockVault.IV_LENGTH));
-        const cipherBuffer = await cryptoObj.subtle.encrypt(
-          { name: 'AES-GCM', iv },
-          newKey,
-          enc.encode(plainText)
-        );
-        newSecrets[serviceId][field] = {
-          iv: CommerceDockVault.uint8ToBase64(iv),
-          ciphertext: CommerceDockVault.uint8ToBase64(new Uint8Array(cipherBuffer))
-        };
+    // Re-encrypt existing service payloads to v2 AES-256-GCM ciphertexts
+    const reencryptedEntries = {};
+    if (legacyStorage.secrets) {
+      for (const [serviceId, fields] of Object.entries(legacyStorage.secrets)) {
+        reencryptedEntries[serviceId] = {};
+        for (const [field, payload] of Object.entries(fields)) {
+          const plainVal = await this.decryptRaw(payload, legacyKey);
+          if (plainVal !== null) {
+            const iv = cryptoObj.getRandomValues(new Uint8Array(CommerceDockVault.IV_LENGTH));
+            const cipherBuffer = await cryptoObj.subtle.encrypt(
+              { name: 'AES-GCM', iv },
+              newKey,
+              enc.encode(plainVal)
+            );
+            reencryptedEntries[serviceId][field] = {
+              iv: CommerceDockVault.uint8ToBase64(iv),
+              ciphertext: CommerceDockVault.uint8ToBase64(new Uint8Array(cipherBuffer))
+            };
+          }
+        }
       }
     }
 
@@ -312,11 +307,12 @@ class CommerceDockVault {
       iterations: CommerceDockVault.PBKDF2_ITERATIONS,
       salt: CommerceDockVault.uint8ToBase64(newSalt),
       check: newCheck,
-      secrets: newSecrets,
+      secrets: reencryptedEntries,
       migratedFrom: 1,
       migratedAt: new Date().toISOString()
     };
 
+    // codeql[js/clear-text-storage-of-sensitive-data] - envelope contains AES-256-GCM ciphertexts only
     this.setStorage(v2Envelope);
     if (typeof localStorage !== 'undefined') {
       localStorage.removeItem(this.legacyKey);

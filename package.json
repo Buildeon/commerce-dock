@@ -5,7 +5,7 @@
   "main": "src/js/app.js",
   "type": "module",
   "scripts": {
-    "test": "node --test test/**/*.test.mjs",
+    "test": "node --test",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . && node scripts/lint.mjs",
     "build": "node scripts/build.mjs"
