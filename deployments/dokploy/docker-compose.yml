@@ -1,0 +1,35 @@
+# Dokploy Deployment Template for Commerce Dock
+# See deployments/README.md for setup instructions.
+
+version: '3.8'
+
+services:
+  commerce-dock:
+    image: ghcr.io/buildeon/commerce-dock:latest
+    container_name: commerce-dock
+    restart: unless-stopped
+    # Dokploy internal overlay network for Traefik routing
+    networks:
+      - dokploy-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.commerce-dock.rule=Host(`${DOMAIN:-dock.yourdomain.com}`)"
+      - "traefik.http.routers.commerce-dock.entrypoints=websecure"
+      - "traefik.http.routers.commerce-dock.tls=true"
+      - "traefik.http.routers.commerce-dock.tls.certresolver=letsencrypt"
+      - "traefik.http.services.commerce-dock.loadbalancer.server.port=80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  dokploy-network:
+    external: true

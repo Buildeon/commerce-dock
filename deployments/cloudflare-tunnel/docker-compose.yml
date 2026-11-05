@@ -1,0 +1,46 @@
+# Cloudflare Zero Trust Tunnel Deployment for Commerce Dock
+# Fully air-gapped ingress: zero open inbound ports to WAN.
+# See deployments/README.md for setup instructions.
+
+version: '3.8'
+
+services:
+  commerce-dock:
+    image: ghcr.io/buildeon/commerce-dock:latest
+    container_name: commerce-dock
+    restart: unless-stopped
+    # Internal docker network only - no host ports published!
+    networks:
+      - tunnel-net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: commerce-dock-tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - tunnel-net
+    depends_on:
+      - commerce-dock
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  tunnel-net:
+    driver: bridge
