@@ -106,11 +106,21 @@ import { getServiceIcon } from './icons.js';
     setTimeout(() => toastEl.classList.remove('show'), duration);
   }
 
+  const DEDICATED_HOST_PRESETS = {
+    'sharafdg': 'sharafdg',
+    'wakqasahmed': 'wakqasahmed',
+    'flowform': 'flowform',
+    'signalops': 'signalops',
+    'safevault': 'safevault',
+    'tools': 'buildeon-fleet'
+  };
+
   function resolvePresetName() {
     const host = window.location.hostname.toLowerCase();
     // Strictly bind dedicated subdomains to prevent preset switching or leaks
-    if (host.includes('sharafdg')) return 'sharafdg';
-    if (host.includes('tools')) return 'buildeon-fleet';
+    for (const [key, preset] of Object.entries(DEDICATED_HOST_PRESETS)) {
+      if (host.includes(key)) return preset;
+    }
 
     const params = new URLSearchParams(window.location.search);
     const queryPreset = params.get('preset');
@@ -121,7 +131,7 @@ import { getServiceIcon } from './icons.js';
 
   async function loadPreset(presetName) {
     const host = window.location.hostname.toLowerCase();
-    const isDedicatedHost = host.includes('sharafdg') || host.includes('tools');
+    const isDedicatedHost = Object.keys(DEDICATED_HOST_PRESETS).some(key => host.includes(key));
 
     try {
       const response = await fetch(`/src/presets/${presetName}.json`);

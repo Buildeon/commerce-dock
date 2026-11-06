@@ -1,0 +1,144 @@
+{
+  "dockId": "signalops-telecom-ops",
+  "title": "SignalOps & InboxOps Cockpit",
+  "subtitle": "WhatsApp Business API, Unified Inbound Triage & Communications Gateway",
+  "brand": {
+    "name": "SignalOps",
+    "theme": "amber",
+    "primaryColor": "#f59e0b",
+    "secondaryColor": "#ea580c",
+    "bgColor": "#1a0f05",
+    "fontStack": "modern-sans",
+    "allowThemeCustomizer": true
+  },
+  "accessControl": {
+    "inviteOnly": true,
+    "inviteCode": "SIGNALOPS-OPS-2026",
+    "promptTitle": "Communications Operations Ingress",
+    "promptMessage": "Access to WhatsApp Business API sessions, customer message streams, and triage queues is strictly restricted."
+  },
+  "services": [
+    {
+      "id": "signalops-apex",
+      "name": "SignalOps Marketing Apex",
+      "category": "marketing",
+      "environment": "production",
+      "badge": "Communications Apex",
+      "url": "https://signalops.agency",
+      "status": "online",
+      "description": "Commercial marketing site for WhatsApp business automation, omnichannel messaging, and customer workflow APIs.",
+      "icon": "📡",
+      "subplatforms": [
+        {
+          "name": "Production Apex Site",
+          "url": "https://signalops.agency",
+          "icon": "🌐",
+          "description": "Live production edge delivery."
+        }
+      ]
+    },
+    {
+      "id": "inboxops-prod",
+      "name": "InboxOps Inbound Triage",
+      "category": "inbound",
+      "environment": "production",
+      "badge": "Inbound Triage",
+      "url": "https://inboxops.agency",
+      "status": "online",
+      "description": "Production omnichannel triage engine routing inbound communications across email, WhatsApp, and form submissions.",
+      "icon": "📥",
+      "subplatforms": [
+        {
+          "name": "InboxOps Apex",
+          "url": "https://inboxops.agency",
+          "icon": "📬",
+          "description": "Production triage overview."
+        }
+      ]
+    },
+    {
+      "id": "signalops-dashboard-stage",
+      "name": "SignalOps Control Plane (Staging)",
+      "category": "automation",
+      "environment": "staging",
+      "badge": "Communications Hub",
+      "url": "https://stg-dashboard.signalops.agency",
+      "status": "online",
+      "description": "Staging control plane managing live messaging sessions, webhook routes, and lead routing rules.",
+      "icon": "📡",
+      "credentials": {
+        "username": "admin@signalops.agency",
+        "hint": "Master Password unlocks SignalOps dashboard"
+      },
+      "subplatforms": [
+        {
+          "name": "SignalOps Staging Dashboard",
+          "url": "https://stg-dashboard.signalops.agency",
+          "icon": "📊",
+          "description": "Live session monitoring via fleet tunnel."
+        }
+      ]
+    },
+    {
+      "id": "signalops-waha-stage",
+      "name": "WAHA WhatsApp HTTP API (Staging)",
+      "category": "automation",
+      "environment": "staging",
+      "badge": "WhatsApp API",
+      "url": "https://stg-waha.signalops.agency",
+      "status": "online",
+      "description": "Self-hosted WhatsApp HTTP API gateway managing session QR authentication, message webhooks, and template triggers.",
+      "icon": "💬",
+      "credentials": {
+        "username": "admin@signalops.agency",
+        "hint": "Master Password unlocks WAHA API keys"
+      },
+      "subplatforms": [
+        {
+          "name": "WAHA API Swagger & Console",
+          "url": "https://stg-waha.signalops.agency",
+          "icon": "⚡",
+          "description": "Interactive API docs and session QR scanner."
+        }
+      ]
+    },
+    {
+      "id": "inboxops-dashboard-stage",
+      "name": "InboxOps Operations (Staging)",
+      "category": "inbound",
+      "environment": "staging",
+      "badge": "Triage Dashboard",
+      "url": "https://inboxops.signalops.agency",
+      "status": "online",
+      "description": "Staging unified inbox triage dashboard aggregating incoming customer messages across channels.",
+      "icon": "📥",
+      "subplatforms": [
+        {
+          "name": "InboxOps Triage View",
+          "url": "https://inboxops.signalops.agency",
+          "icon": "🔍",
+          "description": "Staging message queue and operator assignment."
+        }
+      ]
+    },
+    {
+      "id": "signalops-marketing-stage",
+      "name": "SignalOps Marketing (Staging)",
+      "category": "marketing",
+      "environment": "staging",
+      "badge": "Staging Preview",
+      "url": "https://staging.signalops.agency",
+      "status": "online",
+      "description": "Pre-release marketing preview for testing new product landing pages and WhatsApp integration guides.",
+      "icon": "🌐",
+      "subplatforms": [
+        {
+          "name": "Staging Site Preview",
+          "url": "https://staging.signalops.agency",
+          "icon": "🧪",
+          "description": "Staging marketing preview via fleet tunnel."
+        }
+      ]
+    }
+  ]
+}

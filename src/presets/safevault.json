@@ -1,0 +1,95 @@
+{
+  "dockId": "safevault-sovereign-ops",
+  "title": "SafeVault Operations Cockpit",
+  "subtitle": "Cryptographic Hardware Wallets, Secure Commerce & Inventory Staging",
+  "brand": {
+    "name": "SafeVault",
+    "theme": "gold",
+    "primaryColor": "#f59e0b",
+    "secondaryColor": "#d97706",
+    "bgColor": "#140e04",
+    "fontStack": "geometric",
+    "allowThemeCustomizer": true
+  },
+  "accessControl": {
+    "inviteOnly": true,
+    "inviteCode": "SAFEVAULT-OPS-2026",
+    "promptTitle": "Sovereign Operations Gate",
+    "promptMessage": "This cockpit manages cryptographic hardware wallet stock, WooCommerce checkout gates, and supplier landed costs."
+  },
+  "services": [
+    {
+      "id": "safevault-storefront-prod",
+      "name": "SafeVault Storefront (Production)",
+      "category": "commerce",
+      "environment": "production",
+      "badge": "WooCommerce Live",
+      "url": "https://safevault.pk",
+      "status": "online",
+      "description": "Production WooCommerce storefront distributing Ledger Nano S Plus hardware wallets and sovereign digital privacy infrastructure.",
+      "icon": "woocommerce",
+      "subplatforms": [
+        {
+          "name": "Live Flagship Store",
+          "url": "https://safevault.pk",
+          "icon": "🛍️",
+          "description": "Public catalog and biometric WebAuthn checkout."
+        },
+        {
+          "name": "WooCommerce Production Admin",
+          "url": "https://safevault.pk/wp-admin",
+          "icon": "⚙️",
+          "description": "Order dispatch, customer management, and payment reconciliation."
+        }
+      ]
+    },
+    {
+      "id": "safevault-storefront-stage",
+      "name": "SafeVault WooCommerce (Staging)",
+      "category": "commerce",
+      "environment": "staging",
+      "badge": "WooCommerce Staging",
+      "url": "https://staging-shop.safevault.zone",
+      "status": "online",
+      "description": "Dedicated pre-production commerce environment for checkout validation, plugin testing, and payment gateway staging.",
+      "icon": "woocommerce",
+      "credentials": {
+        "username": "admin@safevault.zone",
+        "hint": "Master Password controls SafeVault Staging credentials"
+      },
+      "subplatforms": [
+        {
+          "name": "Staging Storefront",
+          "url": "https://staging-shop.safevault.zone",
+          "icon": "🧪",
+          "description": "Live preview of new product bundles and checkout flows."
+        },
+        {
+          "name": "Staging Admin Panel (WP-Admin)",
+          "url": "https://staging-shop.safevault.zone/wp-admin/",
+          "icon": "🔑",
+          "description": "WooCommerce plugin staging and order audits via fleet tunnel."
+        }
+      ]
+    },
+    {
+      "id": "safevault-telemetry-stage",
+      "name": "SafeVault SKU Margin & Content Telemetry",
+      "category": "analytics",
+      "environment": "staging",
+      "badge": "Margin Ops",
+      "url": "https://staging.buildeon.agency/tools/commerce-observability/",
+      "status": "online",
+      "description": "Internal telemetry stream linking Ledger Nano landed wholesale costs, Hermes content attribution, and gross margin guardrails.",
+      "icon": "grafana",
+      "subplatforms": [
+        {
+          "name": "SafeVault Observability Agent",
+          "url": "https://staging.buildeon.agency/tools/commerce-observability/",
+          "icon": "🔭",
+          "description": "SKU margin bleed and inventory delta audits."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "dockId": "wakqasahmed-personal-ops",
+  "title": "Waqas Ahmed Operations Dock",
+  "subtitle": "Personal Engineering Systems, Ghost Newsletters & n8n Automations",
+  "brand": {
+    "name": "Waqas Ahmed",
+    "theme": "slate",
+    "primaryColor": "#38bdf8",
+    "secondaryColor": "#818cf8",
+    "bgColor": "#0b1120",
+    "fontStack": "modern-sans",
+    "allowThemeCustomizer": true
+  },
+  "accessControl": {
+    "inviteOnly": true,
+    "inviteCode": "WAQAS-OPS-2026",
+    "promptTitle": "Personal Operations Ingress",
+    "promptMessage": "This operations dock controls personal automation pipelines, Ghost publication backends, and engineering portfolio workflows."
+  },
+  "services": [
+    {
+      "id": "wakqas-web-prod",
+      "name": "Personal Portfolio & Engineering Hub",
+      "category": "marketing",
+      "environment": "production",
+      "badge": "Portfolio Apex",
+      "url": "https://wakqasahmed.com",
+      "status": "online",
+      "description": "Public personal portfolio, systems engineering architecture notes, and AI agent case studies.",
+      "icon": "🌐",
+      "subplatforms": [
+        {
+          "name": "Portfolio Production Apex",
+          "url": "https://wakqasahmed.com",
+          "icon": "🚀",
+          "description": "Production engineering site."
+        }
+      ]
+    },
+    {
+      "id": "wakqas-newsletter-prod",
+      "name": "Ghost Newsletter Platform (Production)",
+      "category": "marketing",
+      "environment": "production",
+      "badge": "Publication Engine",
+      "url": "https://newsletter.wakqasahmed.com",
+      "status": "online",
+      "description": "Personal publication engine delivering deep dives on agentic architecture and software engineering via Amazon SES.",
+      "icon": "ghost",
+      "subplatforms": [
+        {
+          "name": "Ghost Production Admin",
+          "url": "https://newsletter.wakqasahmed.com/ghost",
+          "icon": "👻",
+          "description": "Newsletter editor and subscriber management."
+        }
+      ]
+    },
+    {
+      "id": "wakqas-n8n-prod",
+      "name": "n8n Workflow Automation (Production)",
+      "category": "automation",
+      "environment": "production",
+      "badge": "Workflow Studio",
+      "url": "https://automation.buildeon.agency",
+      "status": "online",
+      "description": "Production workflow engine managing automated lead notifications, RSS feeds, and newsletter sync.",
+      "icon": "n8n",
+      "credentials": {
+        "username": "wakqas@buildeon.agency",
+        "hint": "Master Password unlocks personal n8n credentials"
+      },
+      "subplatforms": [
+        {
+          "name": "Workflow Studio",
+          "url": "https://automation.buildeon.agency",
+          "icon": "⚡",
+          "description": "Production webhook triggers and multi-step workflows."
+        }
+      ]
+    },
+    {
+      "id": "wakqas-n8n-stage",
+      "name": "n8n Workflow Automation (Staging)",
+      "category": "automation",
+      "environment": "staging",
+      "badge": "Staging Automation",
+      "url": "https://staging-n8n.wakqasahmed.com",
+      "status": "online",
+      "description": "Dedicated pre-production workflow sandbox for testing webhook handlers and API credentials.",
+      "icon": "n8n",
+      "subplatforms": [
+        {
+          "name": "Staging Workflow Canvas",
+          "url": "https://staging-n8n.wakqasahmed.com",
+          "icon": "🧪",
+          "description": "Active staging tunnel workflow workspace."
+        }
+      ]
+    },
+    {
+      "id": "wakqas-ghost-stage",
+      "name": "Ghost Newsletter Platform (Staging)",
+      "category": "marketing",
+      "environment": "staging",
+      "badge": "Newsletter Staging",
+      "url": "https://staging-newsletter.wakqasahmed.com/ghost",
+      "status": "online",
+      "description": "Pre-release staging publication instance for drafting newsletter layouts and verifying theme updates.",
+      "icon": "ghost",
+      "subplatforms": [
+        {
+          "name": "Staging Ghost Admin",
+          "url": "https://staging-newsletter.wakqasahmed.com/ghost",
+          "icon": "🧪",
+          "description": "Newsletter staging console via fleet tunnel."
+        }
+      ]
+    },
+    {
+      "id": "wakqas-omniroute",
+      "name": "OmniRoute LLM Gateway",
+      "category": "ai",
+      "environment": "development",
+      "badge": "LLM Router",
+      "url": "http://localhost:20128",
+      "status": "online",
+      "description": "Local AI token optimizer and unified model gateway for Claude CLI, OpenAI, and DeepSeek coding sessions.",
+      "icon": "omniroute",
+      "subplatforms": [
+        {
+          "name": "LiteLLM Proxy UI",
+          "url": "http://localhost:20128",
+          "icon": "🔀",
+          "description": "Model latency telemetry and key manager."
+        }
+      ]
+    }
+  ]
+}

@@ -19,11 +19,11 @@
   },
   "services": [
     {
-      "id": "sdg-oms",
-      "name": "Order Management System (OMS)",
+      "id": "sdg-oms-prod",
+      "name": "Order Management System (OMS - Production)",
       "category": "commerce",
       "environment": "production",
-      "badge": "Laravel Engine",
+      "badge": "Production Core",
       "url": "https://dgoms.sharafdg.com",
       "status": "online",
       "description": "Enterprise order orchestration engine routing orders across GCC distribution hubs, stores, and last-mile couriers.",
@@ -36,41 +36,41 @@
           "description": "Live production order routing, allocation, and invoice generation."
         },
         {
-          "name": "OMS Staging Environment",
-          "url": "https://oms.sdgstage.com",
-          "icon": "🧪",
-          "description": "Pre-release order orchestration testing sandbox."
+          "name": "Dispatch & Courier Routing",
+          "url": "https://dgoms.sharafdg.com/orders",
+          "icon": "🚚",
+          "description": "Live delivery tracking and courier allocation."
         }
       ]
     },
     {
-      "id": "sdg-pim",
-      "name": "Akeneo Enterprise PIM",
+      "id": "sdg-pim-prod",
+      "name": "Akeneo Enterprise PIM (Production)",
       "category": "commerce",
       "environment": "production",
-      "badge": "Cloud Catalog",
+      "badge": "Live Catalog",
       "url": "https://sharafdg.cloud.akeneo.com",
       "status": "online",
       "description": "Master product catalog, category taxonomy, technical spec sheets, and digital asset management for GCC catalogs.",
       "icon": "akeneo",
       "subplatforms": [
         {
-          "name": "Akeneo PIM (Production)",
+          "name": "Akeneo Master Catalog",
           "url": "https://sharafdg.cloud.akeneo.com",
           "icon": "🟢",
           "description": "Live master product catalog and attribute enrichment."
         },
         {
-          "name": "Akeneo PIM (Staging)",
-          "url": "https://staging-sharafdg.cloud.akeneo.com",
-          "icon": "🧪",
-          "description": "Staging product sync and syndication testing."
+          "name": "Attribute Families & Locales",
+          "url": "https://sharafdg.cloud.akeneo.com",
+          "icon": "🌐",
+          "description": "Arabic & English catalog syndication and channel exports."
         }
       ]
     },
     {
-      "id": "sdg-storefronts",
-      "name": "Regional Storefronts",
+      "id": "sdg-storefronts-prod",
+      "name": "Regional Flagship Storefronts (Production)",
       "category": "commerce",
       "environment": "production",
       "badge": "GCC Flagship",
@@ -80,7 +80,7 @@
       "icon": "adobe-commerce",
       "subplatforms": [
         {
-          "name": "UAE Storefront",
+          "name": "UAE Storefront (Flagship)",
           "url": "https://uae.sharafdg.com",
           "icon": "🇦🇪",
           "description": "Flagship United Arab Emirates marketplace."
@@ -104,7 +104,7 @@
           "description": "Kingdom of Bahrain regional store."
         },
         {
-          "name": "Store Administration (WP-Admin)",
+          "name": "Flagship Administration (WP-Admin)",
           "url": "https://uae.sharafdg.com/wp-admin",
           "icon": "⚙️",
           "description": "Content, landing pages, and banners."
@@ -112,7 +112,89 @@
       ]
     },
     {
-      "id": "sdg-woocommerce-staging",
+      "id": "sdg-search-algolia-prod",
+      "name": "Algolia AI Search & Discovery (Production)",
+      "category": "analytics",
+      "environment": "production",
+      "badge": "Live Index",
+      "url": "https://dashboard.algolia.com",
+      "status": "online",
+      "description": "Real-time SKU facet search, sub-10ms query latency, typo tolerance, and personalized query suggestions.",
+      "icon": "algolia",
+      "subplatforms": [
+        {
+          "name": "Production Search Clusters",
+          "url": "https://dashboard.algolia.com",
+          "icon": "🟢",
+          "description": "Live production search clusters and ranking rules."
+        },
+        {
+          "name": "Merchandising & Analytics",
+          "url": "https://dashboard.algolia.com",
+          "icon": "📊",
+          "description": "Live click-through analytics and query optimization."
+        }
+      ]
+    },
+    {
+      "id": "sdg-cloud-azure-prod",
+      "name": "Microsoft Azure Cloud (Production)",
+      "category": "infra",
+      "environment": "production",
+      "badge": "Live Infra",
+      "url": "https://portal.azure.com",
+      "status": "online",
+      "description": "Enterprise cloud infrastructure powering Sharaf DG clusters, blob storage, load balancers, and virtual networks.",
+      "icon": "☁️",
+      "subplatforms": [
+        {
+          "name": "Azure Production Subscriptions",
+          "url": "https://portal.azure.com",
+          "icon": "🟢",
+          "description": "Production AKS Kubernetes, SQL clusters, and CDN."
+        }
+      ]
+    },
+    {
+      "id": "sdg-oms-stage",
+      "name": "Order Management System (OMS - Staging)",
+      "category": "commerce",
+      "environment": "staging",
+      "badge": "Pre-Prod Sandbox",
+      "url": "https://oms.sdgstage.com",
+      "status": "online",
+      "description": "Pre-release order orchestration testing sandbox for validation of carrier integrations and order routing rules.",
+      "icon": "📦",
+      "subplatforms": [
+        {
+          "name": "OMS Staging Environment",
+          "url": "https://oms.sdgstage.com",
+          "icon": "🧪",
+          "description": "Pre-release order orchestration testing sandbox."
+        }
+      ]
+    },
+    {
+      "id": "sdg-pim-stage",
+      "name": "Akeneo Enterprise PIM (Staging)",
+      "category": "commerce",
+      "environment": "staging",
+      "badge": "Staging Catalog",
+      "url": "https://staging-sharafdg.cloud.akeneo.com",
+      "status": "online",
+      "description": "Staging product catalog environment for product sync testing, new attribute families, and syndication trials.",
+      "icon": "akeneo",
+      "subplatforms": [
+        {
+          "name": "Akeneo PIM (Staging)",
+          "url": "https://staging-sharafdg.cloud.akeneo.com",
+          "icon": "🧪",
+          "description": "Staging product sync and syndication testing."
+        }
+      ]
+    },
+    {
+      "id": "sdg-woocommerce-stage",
       "name": "WooCommerce Engine (Staging)",
       "category": "commerce",
       "environment": "staging",
@@ -120,7 +202,7 @@
       "url": "https://uae.sdgstage.com",
       "status": "online",
       "description": "Dedicated pre-production commerce environment for checkout validation, plugin testing, and payment gateway staging.",
-      "icon": "🛒",
+      "icon": "woocommerce",
       "subplatforms": [
         {
           "name": "Staging Storefront",
@@ -137,22 +219,16 @@
       ]
     },
     {
-      "id": "sdg-search-algolia",
-      "name": "Algolia AI Search & Discovery",
+      "id": "sdg-search-algolia-stage",
+      "name": "Algolia AI Search & Discovery (Staging)",
       "category": "analytics",
-      "environment": "production",
-      "badge": "Search Index",
+      "environment": "staging",
+      "badge": "Test Index",
       "url": "https://dashboard.algolia.com",
       "status": "online",
-      "description": "Real-time SKU facet search, sub-10ms query latency, typo tolerance, and personalized query suggestions.",
+      "description": "Staging search index sandbox for testing re-indexing pipelines, typo tolerance heuristics, and promotional rules.",
       "icon": "algolia",
       "subplatforms": [
-        {
-          "name": "Algolia Search (Production App)",
-          "url": "https://dashboard.algolia.com",
-          "icon": "🟢",
-          "description": "Live production search clusters and ranking rules."
-        },
         {
           "name": "Algolia Search (Staging App)",
           "url": "https://dashboard.algolia.com",
@@ -162,7 +238,7 @@
       ]
     },
     {
-      "id": "sdg-omniroute",
+      "id": "sdg-omniroute-stage",
       "name": "OmniRoute GCC Smart Dispatcher",
       "category": "automation",
       "environment": "staging",
@@ -181,27 +257,8 @@
       ]
     },
     {
-      "id": "sdg-medusa-dev",
-      "name": "Medusa v2 Headless Spike",
-      "category": "commerce",
-      "environment": "development",
-      "badge": "Node.js PoC",
-      "url": "https://dev.sharafdg.internal:9000",
-      "status": "online",
-      "description": "Evaluation microservices architecture for next-generation composable checkout and custom promotion engine.",
-      "icon": "medusa",
-      "subplatforms": [
-        {
-          "name": "Medusa Dev API & Workflows",
-          "url": "https://dev.sharafdg.internal:9000/health",
-          "icon": "⚡",
-          "description": "Automated cart and order workflow API."
-        }
-      ]
-    },
-    {
-      "id": "sdg-jobs-scheduler",
-      "name": "Async Job Scheduler",
+      "id": "sdg-jobs-scheduler-stage",
+      "name": "Async Job Scheduler (Staging)",
       "category": "infra",
       "environment": "staging",
       "badge": "Laravel Worker",
@@ -219,22 +276,16 @@
       ]
     },
     {
-      "id": "sdg-cloud-azure",
-      "name": "Microsoft Azure Cloud",
+      "id": "sdg-cloud-azure-stage",
+      "name": "Microsoft Azure Cloud (Staging)",
       "category": "infra",
-      "environment": "production",
-      "badge": "Enterprise Cloud",
+      "environment": "staging",
+      "badge": "Staging Infra",
       "url": "https://portal.azure.com",
       "status": "online",
-      "description": "Enterprise cloud infrastructure powering Sharaf DG clusters, blob storage, load balancers, and virtual networks.",
+      "description": "Staging cloud resource group containing test virtual networks, sandbox VM scale sets, and pre-release CDN endpoints.",
       "icon": "☁️",
       "subplatforms": [
-        {
-          "name": "Azure Production Subscriptions",
-          "url": "https://portal.azure.com",
-          "icon": "🟢",
-          "description": "Production AKS Kubernetes, SQL, and CDN."
-        },
         {
           "name": "Azure Staging Resource Group",
           "url": "https://portal.azure.com",
@@ -244,8 +295,8 @@
       ]
     },
     {
-      "id": "sdg-observability-grafana",
-      "name": "Grafana Observability",
+      "id": "sdg-observability-grafana-stage",
+      "name": "Grafana Observability (Staging)",
       "category": "infra",
       "environment": "staging",
       "badge": "Metrics & Alerts",

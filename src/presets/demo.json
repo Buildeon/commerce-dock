@@ -11,13 +11,99 @@
   "services": [
     {
       "id": "demo-opencart",
-      "name": "OpenCart",
+      "name": "OpenCart B2C Storefront",
       "category": "commerce",
       "environment": "production",
-      "badge": "Active Demo",
+      "badge": "Live B2C Storefront",
       "url": "https://demo.opencart.com/",
       "status": "online",
-      "description": "Lightweight open-source e-commerce platform with pre-configured administrative sandbox and order workflow.",
+      "description": "Lightweight open-source e-commerce storefront with active product catalog, currency switcher, and checkout flow.",
+      "icon": "opencart",
+      "subplatforms": [
+        {
+          "name": "Public Catalog & Cart",
+          "url": "https://demo.opencart.com/",
+          "icon": "🛍️",
+          "description": "Product variants, shopping cart, and guest checkout."
+        }
+      ]
+    },
+    {
+      "id": "demo-adobe-commerce",
+      "name": "Adobe Commerce (Magento 2)",
+      "category": "commerce",
+      "environment": "production",
+      "badge": "Live B2B Storefront",
+      "url": "https://magento2-b2b.magebit.com/",
+      "status": "online",
+      "description": "Enterprise composable commerce storefront with multi-warehouse inventory, B2B wholesale pricing, and quick order.",
+      "icon": "adobe-commerce",
+      "subplatforms": [
+        {
+          "name": "B2B Storefront & Quick Order",
+          "url": "https://magento2-b2b.magebit.com/",
+          "icon": "📦",
+          "description": "Wholesale catalog, volume tiered pricing, and corporate quotes."
+        }
+      ]
+    },
+    {
+      "id": "demo-flowform",
+      "name": "FlowForm Inbound Gateway",
+      "category": "inbound",
+      "environment": "production",
+      "badge": "Form Relay Demo",
+      "url": "https://demo.flowformhq.com",
+      "status": "online",
+      "description": "Headless form intake engine with field-level encryption, multi-tenant lead routing, and instant webhook dispatch.",
+      "icon": "📝",
+      "subplatforms": [
+        {
+          "name": "Interactive Form Demo",
+          "url": "https://demo.flowformhq.com",
+          "icon": "✨",
+          "description": "Live multi-step client-side encrypted intake playground."
+        },
+        {
+          "name": "FlowForm Apex & Documentation",
+          "url": "https://flowformhq.com",
+          "icon": "🌐",
+          "description": "Platform specifications and architecture overview."
+        }
+      ]
+    },
+    {
+      "id": "demo-umami",
+      "name": "Umami Analytics",
+      "category": "analytics",
+      "environment": "production",
+      "badge": "Live Telemetry",
+      "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
+      "status": "online",
+      "description": "Zero-cookie, GDPR-compliant privacy analytics telemetry tracking live visitors, events, and referrer graphs.",
+      "icon": "umami",
+      "credentials": {
+        "username": "admin",
+        "hint": "Master Password Unlocks: admin / umami"
+      },
+      "subplatforms": [
+        {
+          "name": "Umami Live Demo Dashboard",
+          "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
+          "icon": "📈",
+          "description": "Live real-time telemetry metrics."
+        }
+      ]
+    },
+    {
+      "id": "demo-opencart-admin",
+      "name": "OpenCart Admin Console",
+      "category": "commerce",
+      "environment": "staging",
+      "badge": "Store Admin Sandbox",
+      "url": "https://demo.opencart.com/TlbeVW/",
+      "status": "online",
+      "description": "Administrative operations console for catalog configuration, customer groups, and order fulfillment testing.",
       "icon": "opencart",
       "credentials": {
         "username": "demo",
@@ -29,24 +115,18 @@
           "url": "https://demo.opencart.com/TlbeVW/",
           "icon": "🔑",
           "description": "Login: demo / demo (prefilled sandbox access)"
-        },
-        {
-          "name": "OpenCart Storefront",
-          "url": "https://demo.opencart.com/",
-          "icon": "🛍️",
-          "description": "Public catalog, product variants, and checkout flow."
         }
       ]
     },
     {
-      "id": "demo-adobe-commerce",
-      "name": "Adobe Commerce (Magento 2)",
+      "id": "demo-adobe-commerce-admin",
+      "name": "Magento 2 Admin Console",
       "category": "commerce",
       "environment": "staging",
-      "badge": "Enterprise B2B Demo",
-      "url": "https://magento2-b2b.magebit.com/",
+      "badge": "Enterprise Admin",
+      "url": "https://magento2-b2b.magebit.com/admin",
       "status": "online",
-      "description": "Enterprise composable commerce platform with multi-warehouse inventory, B2B quotes, and customer groups.",
+      "description": "Enterprise administrative backend managing customer credit lines, B2B price lists, and fulfillment nodes.",
       "icon": "adobe-commerce",
       "credentials": {
         "username": "magebit",
@@ -58,25 +138,23 @@
           "url": "https://magento2-b2b.magebit.com/admin",
           "icon": "⚙️",
           "description": "Login: magebit / Demo123"
-        },
-        {
-          "name": "B2B Storefront",
-          "url": "https://magento2-b2b.magebit.com/",
-          "icon": "📦",
-          "description": "Enterprise quote generator, bulk ordering & Tier pricing."
         }
       ]
     },
     {
       "id": "demo-unopim",
-      "name": "UnoPim PIM",
+      "name": "UnoPim Enterprise PIM",
       "category": "commerce",
       "environment": "staging",
-      "badge": "Open-Source PIM",
+      "badge": "PIM Sandbox",
       "url": "https://demo.unopim.com/",
       "status": "online",
       "description": "Next-generation Product Information Management built on modern architecture for multi-channel product syndication.",
       "icon": "unopim",
+      "credentials": {
+        "username": "admin",
+        "hint": "Master Password Unlocks: admin / admin123"
+      },
       "subplatforms": [
         {
           "name": "UnoPim Interactive Sandbox",
@@ -94,14 +172,18 @@
     },
     {
       "id": "demo-bagisto",
-      "name": "Bagisto B2C & B2B",
+      "name": "Bagisto Multi-Vendor Marketplace",
       "category": "commerce",
-      "environment": "development",
-      "badge": "Laravel Commerce",
+      "environment": "staging",
+      "badge": "Marketplace Staging",
       "url": "https://demo.bagisto.com/",
       "status": "online",
       "description": "Modular Laravel-based headless e-commerce platform with multi-tenant marketplace and multi-currency engine.",
       "icon": "bagisto",
+      "credentials": {
+        "username": "admin@example.com",
+        "hint": "Master Password Unlocks: admin@example.com / admin123"
+      },
       "subplatforms": [
         {
           "name": "Bagisto Storefront Demo",
@@ -118,40 +200,60 @@
       ]
     },
     {
-      "id": "demo-umami",
-      "name": "Umami Analytics",
-      "category": "analytics",
-      "environment": "production",
-      "badge": "Privacy Telemetry",
-      "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
+      "id": "demo-medusa",
+      "name": "Medusa v2 Composable Engine",
+      "category": "commerce",
+      "environment": "development",
+      "badge": "Headless Framework",
+      "url": "https://docs.medusajs.com/",
       "status": "online",
-      "description": "Zero-cookie, GDPR-compliant privacy analytics telemetry tracking live visitors, events, and referrer graphs.",
-      "icon": "umami",
+      "description": "Open-source composable commerce engine with modern Node.js architecture, workflows, and multi-region tax/pricing.",
+      "icon": "medusa",
+      "credentials": {
+        "username": "admin@medusa-test.com",
+        "hint": "Master Password Unlocks: admin@medusa-test.com / supersecret"
+      },
       "subplatforms": [
         {
-          "name": "Umami Live Demo Dashboard",
-          "url": "https://eu.umami.is/share/ISgGnssmgHaF8w4u/umami.is",
-          "icon": "📈",
-          "description": "Live real-time telemetry metrics."
+          "name": "Medusa Workflows SDK Docs",
+          "url": "https://docs.medusajs.com/",
+          "icon": "📖",
+          "description": "Workflows, modules, and API specifications."
+        },
+        {
+          "name": "Medusa Engine GitHub",
+          "url": "https://github.com/medusajs/medusa",
+          "icon": "🐙",
+          "description": "Source repository and community ecosystem."
         }
       ]
     },
     {
-      "id": "demo-medusa",
-      "name": "Medusa v2 Composable",
-      "category": "commerce",
+      "id": "demo-dokploy",
+      "name": "Dokploy PaaS Orchestrator",
+      "category": "infra",
       "environment": "development",
-      "badge": "Headless Engine",
-      "url": "https://medusajs.com/",
+      "badge": "PaaS Blueprint",
+      "url": "https://docs.dokploy.com",
       "status": "online",
-      "description": "Open-source composable commerce engine with modern Node.js architecture, workflows, and multi-region tax/pricing.",
-      "icon": "medusa",
+      "description": "Open-source PaaS for Docker Swarm and single-server clusters with automated TLS, rollouts, and Git integrations.",
+      "icon": "portainer",
+      "credentials": {
+        "username": "admin@example.com",
+        "hint": "Master Password Unlocks: admin@example.com / dokploy123"
+      },
       "subplatforms": [
         {
-          "name": "Medusa Documentation & Architecture",
-          "url": "https://docs.medusajs.com/",
-          "icon": "📖",
-          "description": "Workflows, modules, and API specifications."
+          "name": "Dokploy Official Hub",
+          "url": "https://dokploy.com",
+          "icon": "🌐",
+          "description": "Platform overview and release notes."
+        },
+        {
+          "name": "Docker Swarm Blueprints",
+          "url": "https://docs.dokploy.com",
+          "icon": "📚",
+          "description": "Traefik routing and compose templates."
         }
       ]
     }

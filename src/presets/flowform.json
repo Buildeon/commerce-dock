@@ -1,0 +1,102 @@
+{
+  "dockId": "flowform-product-ops",
+  "title": "FlowForm Operations Cockpit",
+  "subtitle": "Headless Form Intake Engine, Field-Level Encryption & Lead Relays",
+  "brand": {
+    "name": "FlowForm",
+    "theme": "emerald",
+    "primaryColor": "#10b981",
+    "secondaryColor": "#14b8a6",
+    "bgColor": "#061a14",
+    "fontStack": "modern-sans",
+    "allowThemeCustomizer": true
+  },
+  "accessControl": {
+    "inviteOnly": true,
+    "inviteCode": "FLOWFORM-OPS-2026",
+    "promptTitle": "FlowForm Engineering Cockpit",
+    "promptMessage": "This workspace is restricted to FlowForm engineers, form pipeline operators, and security reviewers."
+  },
+  "services": [
+    {
+      "id": "flowform-apex",
+      "name": "FlowForm Marketing Apex",
+      "category": "marketing",
+      "environment": "production",
+      "badge": "Marketing Apex",
+      "url": "https://flowformhq.com",
+      "status": "online",
+      "description": "Commercial marketing website, conversion landing pages, and enterprise pricing calculators.",
+      "icon": "🌐",
+      "subplatforms": [
+        {
+          "name": "Official Apex Website",
+          "url": "https://flowformhq.com",
+          "icon": "🌐",
+          "description": "Production edge delivery."
+        }
+      ]
+    },
+    {
+      "id": "flowform-demo",
+      "name": "FlowForm Interactive Playground",
+      "category": "inbound",
+      "environment": "production",
+      "badge": "Frontend Demo",
+      "url": "https://demo.flowformhq.com",
+      "status": "online",
+      "description": "Live interactive form sandbox demonstrating client-side AES-256 field encryption, multi-step layouts, and instant webhook relay.",
+      "icon": "✨",
+      "subplatforms": [
+        {
+          "name": "Interactive Demo App",
+          "url": "https://demo.flowformhq.com",
+          "icon": "📝",
+          "description": "Live multi-step form demonstration."
+        }
+      ]
+    },
+    {
+      "id": "flowform-docs",
+      "name": "FlowForm Developer Documentation",
+      "category": "infra",
+      "environment": "production",
+      "badge": "Developer Docs",
+      "url": "https://docs.flowformhq.com",
+      "status": "online",
+      "description": "Developer documentation, JSON schema specifications, SDK references, and webhook verification guides.",
+      "icon": "📖",
+      "subplatforms": [
+        {
+          "name": "API & Webhook Documentation",
+          "url": "https://docs.flowformhq.com",
+          "icon": "📚",
+          "description": "Developer guides & SDK endpoints."
+        }
+      ]
+    },
+    {
+      "id": "flowform-relay-stage",
+      "name": "FlowForm Relay Engine (Staging)",
+      "category": "inbound",
+      "environment": "staging",
+      "badge": "Relay Sandbox",
+      "url": "https://demo.flowformhq.com/admin",
+      "status": "online",
+      "description": "Pre-production form relay testing environment for validating webhook delivery retries, rate limits, and spam filter rules.",
+      "icon": "🔒",
+      "credentials": {
+        "username": "admin@flowformhq.com",
+        "hint": "Master Password unlocks FlowForm relay admin"
+      },
+      "subplatforms": [
+        {
+          "name": "Form Admin & Ingest Queue",
+          "url": "https://demo.flowformhq.com/admin",
+          "icon": "⚙️",
+          "description": "Ingest pipeline and dead-letter queue testing."
+        }
+      ]
+    }
+  ]
+}

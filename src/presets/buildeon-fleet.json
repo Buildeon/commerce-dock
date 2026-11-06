@@ -19,6 +19,37 @@
   },
   "services": [
     {
+      "id": "web-buildeon",
+      "name": "Buildeon Web Platform",
+      "category": "marketing",
+      "environment": "production",
+      "badge": "Apex Platform",
+      "url": "https://buildeon.solutions",
+      "status": "online",
+      "description": "Production engineering studio apex, open-source commerce directory, and sovereign solution architecture catalog.",
+      "icon": "🌐",
+      "subplatforms": [
+        {
+          "name": "Production Apex Site",
+          "url": "https://buildeon.solutions",
+          "icon": "🌐",
+          "description": "Live production edge delivery."
+        },
+        {
+          "name": "Open-Source Commerce Directory",
+          "url": "https://buildeon.solutions/directory/",
+          "icon": "📚",
+          "description": "Verified directory of 40+ composable platforms."
+        },
+        {
+          "name": "Free Store Margin Audit",
+          "url": "https://buildeon.solutions/tools/margin-audit/",
+          "icon": "💰",
+          "description": "Interactive gross margin diagnostic tool."
+        }
+      ]
+    },
+    {
       "id": "infra-dokploy",
       "name": "Dokploy VPS Orchestrator",
       "category": "infra",
@@ -37,13 +68,13 @@
           "name": "Dokploy Control Plane",
           "url": "https://dokploy.buildeon.agency",
           "icon": "🚢",
-          "description": "Admin ingress & container management"
+          "description": "Admin ingress & container management."
         },
         {
           "name": "Traefik Router Dashboard",
           "url": "https://traefik.buildeon.agency",
           "icon": "🔀",
-          "description": "Traefik reverse proxy metrics & TLS dynamic routers"
+          "description": "Traefik reverse proxy metrics & TLS dynamic routers."
         }
       ]
     },
@@ -66,7 +97,7 @@
           "name": "Umami Admin Console",
           "url": "https://analytics.buildeon.agency",
           "icon": "📊",
-          "description": "Traffic dashboards & event telemetry"
+          "description": "Traffic dashboards & event telemetry."
         },
         {
           "name": "Google Search Console",
@@ -107,187 +138,19 @@
           "name": "LinkedIn Developer Portal",
           "url": "https://www.linkedin.com/developers/apps",
           "icon": "💼",
-          "description": "OAuth app administration"
+          "description": "OAuth app administration."
         },
         {
           "name": "X Developer Portal",
           "url": "https://developer.x.com/en/portal/dashboard",
           "icon": "🐦",
-          "description": "OAuth 2.0 app dashboard"
-        }
-      ]
-    },
-    {
-      "id": "safevault-woocommerce",
-      "name": "SafeVault WooCommerce",
-      "category": "commerce",
-      "environment": "staging",
-      "badge": "WooCommerce Engine",
-      "url": "https://staging-shop.safevault.zone/wp-admin/",
-      "status": "online",
-      "description": "Enterprise WooCommerce staging cluster with headless REST API, custom payment gateways, and product catalog synchronization.",
-      "icon": "woocommerce",
-      "credentials": {
-        "username": "admin@safevault.zone",
-        "hint": "Master Password controls SafeVault WP Admin credentials"
-      },
-      "subplatforms": [
-        {
-          "name": "WooCommerce WP-Admin",
-          "url": "https://staging-shop.safevault.zone/wp-admin/",
-          "icon": "🛍️",
-          "description": "Store configuration, database tests, and order audits."
-        },
-        {
-          "name": "Staging Storefront Preview",
-          "url": "https://staging-shop.safevault.zone",
-          "icon": "🛒",
-          "description": "Customer checkout flow validation"
-        }
-      ]
-    },
-    {
-      "id": "automation-n8n",
-      "name": "n8n Workflow Automation",
-      "category": "automation",
-      "environment": "production",
-      "badge": "Event Orchestration",
-      "url": "https://n8n.buildeon.agency",
-      "status": "online",
-      "description": "Fair-code workflow automation node executing inbound webhook intake, CRM sync, and AI agent execution graphs.",
-      "icon": "n8n",
-      "credentials": {
-        "username": "admin@buildeon.solutions",
-        "hint": "Master Password controls n8n Basic Auth & API keys"
-      },
-      "subplatforms": [
-        {
-          "name": "n8n Canvas Editor",
-          "url": "https://n8n.buildeon.agency",
-          "icon": "⚡",
-          "description": "Workflow designer, execution traces & webhooks"
-        }
-      ]
-    },
-    {
-      "id": "inbound-paperclip",
-      "name": "Paperclip CRM & Lead Vault",
-      "category": "inbound",
-      "environment": "production",
-      "badge": "Lead Intake CRM",
-      "url": "https://paperclip.buildeon.agency",
-      "status": "online",
-      "description": "Zero-leakage lead intake pipeline capturing inbound audit submissions, RFP briefs, and prospect records.",
-      "icon": "twenty",
-      "credentials": {
-        "username": "admin@buildeon.solutions",
-        "hint": "Master Password controls Paperclip CRM credentials"
-      },
-      "subplatforms": [
-        {
-          "name": "Paperclip Workspace",
-          "url": "https://paperclip.buildeon.agency",
-          "icon": "📎",
-          "description": "CRM pipeline, deals, and customer activity"
-        }
-      ]
-    },
-    {
-      "id": "ai-omniroute",
-      "name": "OmniRoute AI Gateway",
-      "category": "infra",
-      "environment": "production",
-      "badge": "LiteLLM Router",
-      "url": "https://omniroute.buildeon.agency",
-      "status": "online",
-      "description": "Multi-provider LLM load balancer and API key router powering high-throughput inference across Anthropic, OpenAI, and Gemini.",
-      "icon": "omniroute",
-      "credentials": {
-        "username": "admin@buildeon.solutions",
-        "hint": "Master Password controls OmniRoute router tokens"
-      },
-      "subplatforms": [
-        {
-          "name": "LiteLLM Proxy UI",
-          "url": "https://omniroute.buildeon.agency",
-          "icon": "🔀",
-          "description": "Provider health, spend analytics, and fallback routes"
-        }
-      ]
-    },
-    {
-      "id": "inbound-flowform",
-      "name": "FlowForm Inbound Engine",
-      "category": "inbound",
-      "environment": "staging",
-      "badge": "Form Gateway",
-      "url": "https://demo.flowformhq.com",
-      "status": "online",
-      "description": "Headless form relay with field-level AES-256 encryption, multi-tenant workflows, and webhook dispatch.",
-      "icon": "📝",
-      "credentials": {
-        "username": "admin@flowformhq.com",
-        "hint": "Master Password controls FlowForm Engine Admin"
-      },
-      "subplatforms": [
-        {
-          "name": "FlowForm Interactive Demo",
-          "url": "https://demo.flowformhq.com",
-          "icon": "✨",
-          "description": "Live interactive form engine sandbox"
-        },
-        {
-          "name": "FlowForm Marketing Apex",
-          "url": "https://flowformhq.com",
-          "icon": "🌐",
-          "description": "Official marketing site & documentation"
-        },
-        {
-          "name": "FlowForm Docs",
-          "url": "https://docs.flowformhq.com",
-          "icon": "📖",
-          "description": "Developer guides & API reference"
-        }
-      ]
-    },
-    {
-      "id": "signalops-fleet",
-      "name": "SignalOps & InboxOps Fleet",
-      "category": "inbound",
-      "environment": "development",
-      "badge": "WhatsApp & Inbound",
-      "url": "https://stg-dashboard.signalops.agency",
-      "status": "online",
-      "description": "Omnichannel communication gateway with WAHA (WhatsApp HTTP API), Odoo ERP sync, and InboxOps.",
-      "icon": "📡",
-      "credentials": {
-        "username": "admin@signalops.agency",
-        "hint": "Master Password controls WAHA & SignalOps keys"
-      },
-      "subplatforms": [
-        {
-          "name": "SignalOps Dashboard",
-          "url": "https://stg-dashboard.signalops.agency",
-          "icon": "📡",
-          "description": "Communications control plane"
-        },
-        {
-          "name": "WAHA WhatsApp API Console",
-          "url": "https://stg-waha.signalops.agency",
-          "icon": "💬",
-          "description": "WhatsApp HTTP API gateway"
-        },
-        {
-          "name": "SignalOps Marketing Staging",
-          "url": "https://staging.signalops.agency",
-          "icon": "🌐",
-          "description": "Staging apex site"
+          "description": "OAuth 2.0 app dashboard."
         }
       ]
     },
     {
       "id": "newsletter-ghost",
-      "name": "Ghost Newsletter & Publication",
+      "name": "Ghost Newsletter & Insights",
       "category": "marketing",
       "environment": "production",
       "badge": "Publication Engine",
@@ -304,13 +167,61 @@
           "name": "Ghost Newsletter Admin",
           "url": "https://blog.buildeon.solutions/ghost/",
           "icon": "👻",
-          "description": "Publication Admin Portal"
+          "description": "Publication Admin Portal."
         },
         {
           "name": "Buildeon Engineering Insights",
           "url": "https://buildeon.solutions/blog/",
           "icon": "📰",
-          "description": "Public engineering journal"
+          "description": "Public engineering journal."
+        }
+      ]
+    },
+    {
+      "id": "ai-paperclip",
+      "name": "Paperclip AI Orchestration",
+      "category": "automation",
+      "environment": "production",
+      "badge": "Autonomous Ops",
+      "url": "https://paperclip.buy2give.store",
+      "status": "online",
+      "description": "Autonomous multi-agent orchestration board coordinating automated task workflows, execution logs, and background coding tasks.",
+      "icon": "paperclip",
+      "credentials": {
+        "username": "operator@buildeon.agency",
+        "hint": "Master Password controls Paperclip AI tokens"
+      },
+      "subplatforms": [
+        {
+          "name": "Paperclip Workspace",
+          "url": "https://paperclip.buy2give.store",
+          "icon": "📎",
+          "description": "Live agent task queue & status monitoring."
+        }
+      ]
+    },
+    {
+      "id": "web-buildeon-staging",
+      "name": "Buildeon Web Platform (Staging)",
+      "category": "marketing",
+      "environment": "staging",
+      "badge": "Staging Ingress",
+      "url": "https://staging.buildeon.agency",
+      "status": "online",
+      "description": "Pre-release staging environment for buildeon.solutions. Validates Astro builds, blog articles, and tool updates before production rollout.",
+      "icon": "🧪",
+      "subplatforms": [
+        {
+          "name": "Staging Web Preview",
+          "url": "https://staging.buildeon.agency",
+          "icon": "🌐",
+          "description": "Staging edge delivery with live tunnel sync."
+        },
+        {
+          "name": "Commerce Observability (Staging)",
+          "url": "https://staging.buildeon.agency/tools/commerce-observability/",
+          "icon": "🔭",
+          "description": "Pre-release telemetry diagnostic UI."
         }
       ]
     },
@@ -336,12 +247,48 @@
           "url": "https://buildeon.solutions/tools/margin-audit/",
           "icon": "💰",
           "description": "Interactive 3-tier margin bleed & geological era calculator."
-        },
+        }
+      ]
+    },
+    {
+      "id": "ai-gateway-omniroute",
+      "name": "OmniRoute LLM Gateway",
+      "category": "ai",
+      "environment": "development",
+      "badge": "LLM Gateway",
+      "url": "http://localhost:20128",
+      "status": "online",
+      "description": "Unified routing proxy for Anthropic Claude, OpenAI, and DeepSeek with token compression, fallbacks, and cost tracking.",
+      "icon": "omniroute",
+      "credentials": {
+        "username": "admin@buildeon.solutions",
+        "hint": "Master Password controls OmniRoute router tokens"
+      },
+      "subplatforms": [
         {
-          "name": "Open-Source Directory Hub",
-          "url": "https://buildeon.solutions/directory/",
-          "icon": "📚",
-          "description": "Catalog of 40+ verified open-source engines."
+          "name": "LiteLLM Proxy UI",
+          "url": "http://localhost:20128",
+          "icon": "🔀",
+          "description": "Provider health, spend analytics, and fallback routes."
+        }
+      ]
+    },
+    {
+      "id": "crypto-rotki",
+      "name": "Rotki Crypto Accounting",
+      "category": "analytics",
+      "environment": "development",
+      "badge": "Local Accounting",
+      "url": "http://localhost:8084",
+      "status": "online",
+      "description": "Local zero-telemetry portfolio tracking and privacy-preserving blockchain accounting for hardware wallets and liquidity pools.",
+      "icon": "📊",
+      "subplatforms": [
+        {
+          "name": "Starling Local UI",
+          "url": "http://localhost:8084",
+          "icon": "🔒",
+          "description": "Local encrypted accounting database."
         }
       ]
     }
