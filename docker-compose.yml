@@ -14,7 +14,7 @@ services:
       - "127.0.0.1:8089:80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.commerce-dock.rule=Host(`tools.buildeon.agency`)"
+      - "traefik.http.routers.commerce-dock.rule=Host(`tools.buildeon.agency`) || Host(`sharafdg.buildeon.agency`) || Host(`wakqasahmed.buildeon.agency`) || Host(`flowform.buildeon.agency`) || Host(`signalops.buildeon.agency`) || Host(`safevault.buildeon.agency`)"
       - "traefik.http.routers.commerce-dock.entrypoints=websecure"
       - "traefik.http.routers.commerce-dock.tls=true"
       - "traefik.http.routers.commerce-dock.tls.certresolver=le"
