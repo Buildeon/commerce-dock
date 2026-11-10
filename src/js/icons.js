@@ -138,6 +138,17 @@ const SVG_ICONS = {
     <path d="M13 10.5V8.5H15V10.5H13ZM10.5 10.5V8.5H12.5V10.5H10.5ZM8 10.5V8.5H10V10.5H8ZM13 8V6H15V8H13ZM10.5 8V6H12.5V8H10.5ZM8 8V6H10V8H8ZM15.5 10.5V8.5H17.5V10.5H15.5ZM21.9 11.3C21.6 11.2 21.1 11.2 20.7 11.4C20.5 11 20.2 10.7 19.8 10.5L19.4 10.4L19.2 10.8C18.9 11.4 18.8 12 19 12.6C18.6 12.8 18 13.2 17.2 13.2H3C2.4 13.2 2 13.6 2 14.2C2 16.8 3.9 19 8.2 19C13.2 19 17.5 16.7 19.1 12.9C20.3 12.9 21.4 12.2 21.9 11.3Z" fill="#2496ED"/>
   </svg>`,
 
+  'woocommerce': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="5" fill="#7F54B3"/>
+    <path d="M4 7C4 5.34 5.34 4 7 4H17C18.66 4 20 5.34 20 7V13C20 14.66 18.66 16 17 16H11L7 19V16H7C5.34 16 4 14.66 4 13V7Z" fill="#7F54B3"/>
+    <path d="M7.2 8.5C7.5 8.5 7.8 8.8 7.9 9.1L8.8 13.2L10.1 8.8C10.2 8.5 10.5 8.3 10.8 8.4C11.1 8.5 11.2 8.7 11.2 9L10.2 13.9C10.1 14.3 9.7 14.6 9.3 14.6C8.9 14.6 8.5 14.3 8.4 13.9L7.4 9.8L6.5 13.9C6.4 14.3 6 14.6 5.6 14.6C5.2 14.6 4.8 14.3 4.7 13.9L3.8 9C3.8 8.7 3.9 8.5 4.2 8.4C4.5 8.3 4.8 8.5 4.9 8.8L6.2 13.2L7.1 9.1C7.1 8.8 7.2 8.5 7.2 8.5ZM14.2 8.5C14.5 8.5 14.8 8.8 14.9 9.1L15.8 13.2L17.1 8.8C17.2 8.5 17.5 8.3 17.8 8.4C18.1 8.5 18.2 8.7 18.2 9L17.2 13.9C17.1 14.3 16.7 14.6 16.3 14.6C15.9 14.6 15.5 14.3 15.4 13.9L14.4 9.8L13.5 13.9C13.4 14.3 13 14.6 12.6 14.6C12.2 14.6 11.8 14.3 11.7 13.9L10.8 9C10.8 8.7 10.9 8.5 11.2 8.4C11.5 8.3 11.8 8.5 11.9 8.8L13.2 13.2L14.1 9.1C14.1 8.8 14.2 8.5 14.2 8.5Z" fill="#FFFFFF"/>
+  </svg>`,
+
+  'ghost': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="24" height="24" rx="5" fill="#15171A"/>
+    <path d="M12 4C8.13 4 5 7.13 5 11V19L7.5 17.5L10 19L12 17.5L14 19L16.5 17.5L19 19V11C19 7.13 15.87 4 12 4ZM9 11C8.45 11 8 10.55 8 10C8 9.45 8.45 9 9 9C9.55 9 10 9.45 10 10C10 10.55 9.55 11 9 11ZM15 11C14.45 11 14 10.55 14 10C14 9.45 14.45 9 15 9C15.55 9 16 9.45 16 10C16 10.55 15.55 11 15 11Z" fill="#FFFFFF"/>
+  </svg>`,
+
   'anchor': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="2"/>
     <path d="M12 7V19M8 11H16M5 13C5 17.5 8 20 12 20C16 20 19 17.5 19 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -185,6 +196,8 @@ function resolveIconKey(service) {
   if (probe.includes('unopim')) return 'unopim';
   if (probe.includes('bagisto')) return 'bagisto';
   if (probe.includes('docker') || probe.includes('container fleet')) return 'docker';
+  if (probe.includes('woocommerce') || probe.includes('woo')) return 'woocommerce';
+  if (probe.includes('ghost')) return 'ghost';
 
   return null;
 }
@@ -201,9 +214,21 @@ function getServiceIcon(service, size = 28) {
     return `<span class="service-svg-wrap" style="width:${size}px; height:${size}px; display:inline-flex; align-items:center; justify-content:center;" data-icon-key="${iconKey}">${SVG_ICONS[iconKey]}</span>`;
   }
 
-  // Graceful fallback to emoji or default box
-  const emoji = service?.icon && service.icon.length <= 4 ? service.icon : '📦';
-  return `<span class="service-emoji-wrap" style="font-size:${Math.round(size * 0.75)}px;">${emoji}</span>`;
+  // Graceful fallback to emoji, monogram, or default box
+  const raw = String(service?.icon || '').trim();
+  const isEmoji = raw && (raw.length <= 4 || /^\p{Emoji}+$/u.test(raw)) && !/^[a-zA-Z0-9_-]+$/.test(raw);
+  if (isEmoji) {
+    return `<span class="service-emoji-wrap" style="font-size:${Math.round(size * 0.75)}px;">${raw}</span>`;
+  }
+
+  if (raw.length > 0) {
+    // Generate 2-letter monogram fallback for unrecognized text slugs
+    const source = service?.name || raw;
+    const monogram = source.split(/[\s-_]+/).filter(Boolean).map(w => w[0]).slice(0, 2).join('').toUpperCase() || '🛠️';
+    return `<span class="service-monogram-wrap" style="font-size:${Math.round(size * 0.42)}px; font-family:monospace; font-weight:700; width:${size}px; height:${size}px; display:inline-flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.08); border-radius:6px; color:#e4e4e7;">${monogram}</span>`;
+  }
+
+  return `<span class="service-emoji-wrap" style="font-size:${Math.round(size * 0.75)}px;">📦</span>`;
 }
 
 if (typeof module !== 'undefined' && module.exports) {

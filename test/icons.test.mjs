@@ -9,7 +9,7 @@ describe('CommerceDockIcons (Bundled Vector Platform Icons)', () => {
       'stripe', 'strapi', 'n8n', 'supabase', 'posthog',
       'omniroute', 'portainer', 'grafana', 'traefik',
       'postgres', 'redis', 'mailhog', 'opencart', 'umami',
-      'unopim', 'bagisto', 'docker', 'anchor'
+      'unopim', 'bagisto', 'docker', 'anchor', 'woocommerce', 'ghost'
     ];
 
     for (const key of requiredIcons) {
@@ -29,6 +29,8 @@ describe('CommerceDockIcons (Bundled Vector Platform Icons)', () => {
     assert.equal(resolveIconKey({ name: 'Algolia Search Cluster' }), 'algolia');
     assert.equal(resolveIconKey({ name: 'OmniRoute GCC Smart Dispatcher' }), 'omniroute');
     assert.equal(resolveIconKey({ name: 'PostHog Analytics' }), 'posthog');
+    assert.equal(resolveIconKey({ name: 'WooCommerce Storefront' }), 'woocommerce');
+    assert.equal(resolveIconKey({ name: 'Ghost Publishing' }), 'ghost');
     assert.equal(resolveIconKey({ name: 'Custom Tool', icon: 'supabase' }), 'supabase');
   });
 
@@ -40,5 +42,9 @@ describe('CommerceDockIcons (Bundled Vector Platform Icons)', () => {
     const emojiRender = getServiceIcon({ name: 'Custom Legacy CRM', icon: '📞' });
     assert.ok(emojiRender.includes('service-emoji-wrap'));
     assert.ok(emojiRender.includes('📞'));
+
+    const monogramRender = getServiceIcon({ name: 'Custom Gateway System', icon: 'custom-gateway' });
+    assert.ok(monogramRender.includes('service-monogram-wrap'));
+    assert.ok(monogramRender.includes('CG'));
   });
 });
