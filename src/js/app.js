@@ -129,19 +129,54 @@ import { getServiceIcon } from './icons.js';
     return 'demo';
   }
 
+  // Bust stale single-tile custom services from prior schema
+  const SCHEMA_VERSION_KEY = 'commerce_dock_schema_version';
+  const CURRENT_SCHEMA_VERSION = 'v2_separated_tiles';
+  try {
+    if (localStorage.getItem(SCHEMA_VERSION_KEY) !== CURRENT_SCHEMA_VERSION) {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith('commerce_dock_custom_services_')) {
+          localStorage.removeItem(key);
+        }
+      });
+      localStorage.setItem(SCHEMA_VERSION_KEY, CURRENT_SCHEMA_VERSION);
+    }
+  } catch {
+    // ignore
+  }
+
+  function updateEnvironmentPillCounts() {
+    if (!activePresetData || !activePresetData.services) return;
+    const services = activePresetData.services;
+    const total = services.length;
+    const prod = services.filter(s => (s.environment || 'production').toLowerCase() === 'production').length;
+    const stage = services.filter(s => (s.environment || '').toLowerCase() === 'staging').length;
+    const dev = services.filter(s => (s.environment || '').toLowerCase() === 'development').length;
+
+    const countAll = document.getElementById('count-all');
+    const countProd = document.getElementById('count-prod');
+    const countStage = document.getElementById('count-stage');
+    const countDev = document.getElementById('count-dev');
+
+    if (countAll) countAll.textContent = `(${total})`;
+    if (countProd) countProd.textContent = `(${prod})`;
+    if (countStage) countStage.textContent = `(${stage})`;
+    if (countDev) countDev.textContent = `(${dev})`;
+  }
+
   async function loadPreset(presetName) {
     const host = window.location.hostname.toLowerCase();
     const isDedicatedHost = Object.keys(DEDICATED_HOST_PRESETS).some(key => host.includes(key));
 
     try {
-      const response = await fetch(`/src/presets/${presetName}.json`);
+      const response = await fetch(`/src/presets/${presetName}.json?t=${Date.now()}`);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       activePresetData = await response.json();
     } catch (e) {
       console.warn(`Failed to fetch /src/presets/${presetName}.json, fallback to inline demo`, e);
       // Fallback relative path check
       try {
-        const response2 = await fetch(`src/presets/${presetName}.json`);
+        const response2 = await fetch(`src/presets/${presetName}.json?t=${Date.now()}`);
         activePresetData = await response2.json();
       } catch (err) {
         console.error('Fatal: Cannot load preset', err);
@@ -222,6 +257,7 @@ import { getServiceIcon } from './icons.js';
       return;
     }
 
+    updateEnvironmentPillCounts();
     renderServices();
   }
 
@@ -300,6 +336,7 @@ import { getServiceIcon } from './icons.js';
           showToast(`Access granted: Welcome to ${brandName} Operations`);
           if (headerActions) headerActions.style.display = 'flex';
           if (controlsBar) controlsBar.style.display = 'flex';
+          updateEnvironmentPillCounts();
           renderServices();
         } else {
           if (errorEl) errorEl.style.display = 'block';
@@ -829,6 +866,7 @@ import { getServiceIcon } from './icons.js';
       const presetName = resolvePresetName();
       const customKey = `commerce_dock_custom_services_${presetName}`;
       localStorage.setItem(customKey, JSON.stringify(activePresetData.services));
+      updateEnvironmentPillCounts();
     } catch (e) {
       console.warn('Failed to persist custom services:', e);
     }

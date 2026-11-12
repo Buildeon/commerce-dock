@@ -6,7 +6,7 @@
   <title>Commerce Dock: Sovereign Operations Launcher & Stack Hub</title>
   <meta name="description" content="Open-source sovereign operations hub and zero-knowledge client-side encrypted stack launcher for composable commerce, AI, and cloud infrastructure.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>⚓</text></svg>">
-  <link rel="stylesheet" href="src/css/style.css">
+  <link rel="stylesheet" href="src/css/style.css?v=1.2.0">
 </head>
 <body>
 
@@ -107,16 +107,16 @@
           <span class="env-label">Environment:</span>
           <div class="env-pills" id="env-pills">
             <button class="env-pill active" data-env="all">
-              <span class="env-dot env-dot-all"></span> All Envs
+              <span class="env-dot env-dot-all"></span> All Envs <span class="env-count" id="count-all"></span>
             </button>
             <button class="env-pill" data-env="production">
-              <span class="env-dot env-dot-prod"></span> Production
+              <span class="env-dot env-dot-prod"></span> Production <span class="env-count" id="count-prod"></span>
             </button>
             <button class="env-pill" data-env="staging">
-              <span class="env-dot env-dot-stage"></span> Staging
+              <span class="env-dot env-dot-stage"></span> Staging <span class="env-count" id="count-stage"></span>
             </button>
             <button class="env-pill" data-env="development">
-              <span class="env-dot env-dot-dev"></span> Development
+              <span class="env-dot env-dot-dev"></span> Development <span class="env-count" id="count-dev"></span>
             </button>
           </div>
         </div>
@@ -320,11 +320,11 @@
   </footer>
 
   <!-- Scripts -->
-  <script type="module" src="src/js/vault.js"></script>
-  <script type="module" src="src/js/icons.js"></script>
-  <script type="module" src="src/js/theme.js"></script>
-  <script type="module" src="src/js/ssrf-validator.js"></script>
-  <script type="module" src="src/js/pulse.js"></script>
-  <script type="module" src="src/js/app.js"></script>
+  <script type="module" src="src/js/vault.js?v=1.2.0"></script>
+  <script type="module" src="src/js/icons.js?v=1.2.0"></script>
+  <script type="module" src="src/js/theme.js?v=1.2.0"></script>
+  <script type="module" src="src/js/ssrf-validator.js?v=1.2.0"></script>
+  <script type="module" src="src/js/pulse.js?v=1.2.0"></script>
+  <script type="module" src="src/js/app.js?v=1.2.0"></script>
 </body>
 </html>

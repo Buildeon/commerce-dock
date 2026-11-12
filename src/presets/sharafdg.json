@@ -312,6 +312,69 @@
           "description": "Live metrics, alerting thresholds, and error logs."
         }
       ]
+    },
+    {
+      "id": "sdg-medusa-dev",
+      "name": "Medusa v2 Composable Spike (Development)",
+      "category": "commerce",
+      "environment": "development",
+      "badge": "Node.js PoC",
+      "url": "https://dev.sharafdg.internal:9000",
+      "status": "online",
+      "description": "Evaluation microservices architecture for next-generation composable checkout and custom promotion engine.",
+      "icon": "medusa",
+      "subplatforms": [
+        {
+          "name": "Medusa Dev API & Workflows",
+          "url": "https://dev.sharafdg.internal:9000/health",
+          "icon": "⚡",
+          "description": "Automated cart and order workflow API."
+        },
+        {
+          "name": "Medusa Admin Console",
+          "url": "https://dev.sharafdg.internal:9000/app",
+          "icon": "⚙️",
+          "description": "Experimental administrative dashboard."
+        }
+      ]
+    },
+    {
+      "id": "sdg-n8n-dev",
+      "name": "n8n Workflow Automation (Development)",
+      "category": "automation",
+      "environment": "development",
+      "badge": "Workflow Sandbox",
+      "url": "https://dev-n8n.sharafdg.internal:5678",
+      "status": "online",
+      "description": "Sandbox workflow canvas for rapid testing of webhook relays, OMS order event triggers, and catalog sync nodes.",
+      "icon": "n8n",
+      "subplatforms": [
+        {
+          "name": "n8n Dev Workflow Canvas",
+          "url": "https://dev-n8n.sharafdg.internal:5678",
+          "icon": "🔄",
+          "description": "Local/internal development canvas."
+        }
+      ]
+    },
+    {
+      "id": "sdg-strapi-dev",
+      "name": "Strapi Headless CMS (Development)",
+      "category": "infra",
+      "environment": "development",
+      "badge": "Content Sandbox",
+      "url": "https://dev-cms.sharafdg.internal:1337",
+      "status": "online",
+      "description": "Content modeling playground for omnichannel marketing landing pages, promotional banners, and regional storefront content.",
+      "icon": "strapi",
+      "subplatforms": [
+        {
+          "name": "Strapi Admin Playground",
+          "url": "https://dev-cms.sharafdg.internal:1337/admin",
+          "icon": "📝",
+          "description": "Content type builder and REST/GraphQL playground."
+        }
+      ]
     }
   ]
 }
